@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
         loginPW = findViewById(R.id.loginPW);
         signUpEmail = findViewById(R.id.signUpEmail);
         signUpName = findViewById(R.id.signUpName);
-
+        signUpPW1 = findViewById(R.id.signUpPW1);
+        signUpPW2 = findViewById(R.id.signUpPW2);
 
 
         signupBtn.setOnClickListener(new View.OnClickListener() {
