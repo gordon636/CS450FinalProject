@@ -35,19 +35,19 @@
         android:layout_height="wrap_content"
         android:text="Login" />
 
-    <TextView
+    <EditText
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign-up" />
 
-    <TextView
+    <EditText
         android:id="@+id/signUpEmail"
         android:layout_width="match_parent"
         android:layout_height="38dp"
         android:hint="E-mail" />
 
-    <TextView
+    <EditText
         android:id="@+id/signUpName"
         android:layout_width="match_parent"
         android:layout_height="45dp"
