@@ -29,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String name = signUpName.getText().toString();
+                String email = signUpEmail.getText().toString();
+                String password = signUpEmail.getText().toString();
+
 
             }
         });
