@@ -34,7 +34,10 @@ public class User {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mDatabase.child("users").child(user.email).setValue(user.name, user.password);
+        mDatabase.child("users").child(user.email).child("name").setValue(user.name);
+        mDatabase.child("users").child(user.email).child("password").setValue(user.password);
+
+
     }
 
 }

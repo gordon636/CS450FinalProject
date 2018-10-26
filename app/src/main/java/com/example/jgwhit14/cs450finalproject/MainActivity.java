@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DatabaseReference myRef = database.getReference("Users");
 
         signupBtn = findViewById(R.id.signUpBtn);
         loginBtn = findViewById(R.id.loginBtn);
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 String password1 = signUpPW1.getText().toString();
                 String password2 = signUpPW2.getText().toString();
 
-                User user = new User(email, name, password1);
+                User user = new User(email, password1, name);
                 user.writeNewUser(user);
 
             }
