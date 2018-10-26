@@ -1,7 +1,17 @@
 package com.example.jgwhit14.cs450finalproject;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,7 +20,35 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, Observer {
+
+    //GPS
+    private ListView listView;
+    private ArrayList<String> myList;
+    public double currentDistance = 0, totalDistance = 0;
+    public Button myButton,resetButton;
+    private Location startLocation = null;
+    private Location currentLocation = null;
+    private Location prev_Location = null;
+    private LocationHandler handler = null;
+    private double overalVelocity;
+    private double pointVelocity;
+    public double instantVel;
+    private boolean permissions_granted;
+    private boolean isRestart = false;
+    private String myData;
+    private Toast ToastMess;
+    private DecimalFormat df = new DecimalFormat("0.00");
+    private TextView textViewLocation;
+
+    private final static int PERMISSION_REQUEST_CODE = 999;
+    private static final int REQUEST_LOCATION = 1;
+    private final static String LOGTAG = MapsActivity.class.getSimpleName();
 
     private GoogleMap mMap;
 
@@ -22,6 +60,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        textViewLocation = findViewById(R.id.textViewLocation);
+
+        //initiate the handler
+        if (handler == null) {
+            this.handler = new LocationHandler(this);
+            this.handler.addObserver(this);
+        }
+
+        // check permissions
+        if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                    PERMISSION_REQUEST_CODE
+            );
+        }
+    }
+
+    //permission granted or not
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(
+                requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            // we have only asked for FINE LOCATION
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                this.permissions_granted = true;
+                Log.i(LOGTAG, "Fine location permission granted.");
+            }
+            else {
+                this.permissions_granted = false;
+                Log.i(LOGTAG, "Fine location permission not granted.");
+            }
+        }
+
     }
 
 
@@ -42,5 +120,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if (observable instanceof LocationHandler) {
+            final Location l = (Location) o;
+            final double lat = l.getLatitude();
+            final double lon = l.getLongitude();
+            final long time = l.getTime();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(MapsActivity.this.startLocation == null || isRestart){
+                        //   ToastMess = Toast.makeText(getApplicationContext(),"Ready to record",Toast.LENGTH_SHORT);
+                        //   ToastMess.show();
+                        isRestart = false;
+                    }
+
+                    MapsActivity.this.currentLocation = new Location("");
+                    MapsActivity.this.currentLocation.setLatitude(lat);
+                    MapsActivity.this.currentLocation.setLongitude(lon);
+                    MapsActivity.this.currentLocation.setTime(time);
+
+                 //   String holder = "Your Current Location: "+currentLocation.getLatitude() + ", "+currentLocation.getLongitude()+
+                   //         "\nInstantaneous Velocity: "+df.format(Double.valueOf(instantVel))+ " m/s" + "\nOverall Velocity: "+df.format(Double.valueOf(overalVelocity))+ " m/s";
+
+                    String holder = "Your Current Location: "+currentLocation.getLatitude() + ", "+currentLocation.getLongitude();
+
+                    textViewLocation.setText(holder);
+
+//                    myButton.setEnabled(true);
+
+                    // Add a marker to your location and move the camera
+                    LatLng myLocation = new LatLng(lat, lon);
+
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions().position(myLocation).title("You are Here"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+
+                }
+            });
+        }
     }
 }
