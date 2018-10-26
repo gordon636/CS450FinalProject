@@ -18,17 +18,16 @@ public class MainActivity extends AppCompatActivity {
 
     private Button signupBtn, loginBtn;
     private EditText loginEmail, loginPW, signUpEmail, signUpName, signUpPW1, signUpPW2;
-    private  FirebaseDatabase database;
+    private FirebaseDatabase database;
     private String TAG = MainActivity.class.getSimpleName();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DatabaseReference myRef = database.getReference("message");
-
-        myRef.setValue("Hello, World!");
-
+        DatabaseReference myRef = database.getReference("Users");
 
         signupBtn = findViewById(R.id.signUpBtn);
         loginBtn = findViewById(R.id.loginBtn);
@@ -36,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         loginPW = findViewById(R.id.loginPW);
         signUpEmail = findViewById(R.id.signUpEmail);
         signUpName = findViewById(R.id.signUpName);
+        signUpPW1 = findViewById(R.id.signUpPW1);
+        signUpPW2 = findViewById(R.id.signUpPW2);
 
 
         database  = FirebaseDatabase.getInstance();
@@ -45,8 +46,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String name = signUpName.getText().toString();
                 String email = signUpEmail.getText().toString();
-                String password = signUpEmail.getText().toString();
+                String password1 = signUpPW1.getText().toString();
+                String password2 = signUpPW2.getText().toString();
 
+                User user = new User(email, name, password1);
+                user.writeNewUser(user);
 
             }
         });
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                         for (DataSnapshot name:names){
 
                             String Name = name.getValue(String.class);
-                            Log.i(TAG,Name);
+                            Log.i(TAG, Name);
                         }
 
                     }

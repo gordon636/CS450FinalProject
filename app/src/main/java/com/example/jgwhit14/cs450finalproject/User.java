@@ -1,8 +1,40 @@
 package com.example.jgwhit14.cs450finalproject;
 
-public class Users {
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.IgnoreExtraProperties;
 
-    String email;
-    String name;
-    String password;
+@IgnoreExtraProperties
+public class User {
+
+    private DatabaseReference mDatabase;
+
+    public String email;
+    public String password;
+    public String name;
+
+    public User() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    // For creating new users
+    public User(String email, String password, String name) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+    }
+
+    // For importing into the DB
+    private User(String password, String name){
+        this.password = password;
+        this.name = name;
+    }
+
+    public void writeNewUser(User user) {
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        mDatabase.child("users").child(user.email).setValue(user.name, user.password);
+    }
+
 }
