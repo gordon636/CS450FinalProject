@@ -45,6 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Toast ToastMess;
     private DecimalFormat df = new DecimalFormat("0.00");
     private TextView textViewLocation;
+    private boolean loaded = false;
 
     private final static int PERMISSION_REQUEST_CODE = 999;
     private static final int REQUEST_LOCATION = 1;
@@ -158,7 +159,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions().position(myLocation).title("You are Here"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+
+                    if(!loaded) {
+
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                    }
+                    loaded=true;
+
 
                 }
             });
