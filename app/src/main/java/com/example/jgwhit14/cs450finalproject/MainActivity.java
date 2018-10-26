@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FirebaseApp.initializeApp(this);
+        database  = FirebaseDatabase.getInstance();
+
 
         signupBtn = findViewById(R.id.signUpBtn);
         loginBtn = findViewById(R.id.loginBtn);
@@ -37,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
         signUpPW1 = findViewById(R.id.signUpPW1);
         signUpPW2 = findViewById(R.id.signUpPW2);
 
-
-        database  = FirebaseDatabase.getInstance();
 
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
