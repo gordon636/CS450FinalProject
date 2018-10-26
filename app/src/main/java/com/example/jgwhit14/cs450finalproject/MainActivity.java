@@ -6,15 +6,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button signupBtn, loginBtn;
     private EditText loginEmail, loginPW, signUpEmail, signUpName, signUpPW1, signUpPW2;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         signupBtn = findViewById(R.id.signUpBtn);
         loginBtn = findViewById(R.id.loginBtn);
@@ -31,7 +37,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String name = signUpName.getText().toString();
                 String email = signUpEmail.getText().toString();
-                String password = signUpEmail.getText().toString();
+                String password1 = signUpPW1.getText().toString();
+                String password2 = signUpPW2.getText().toString();
+
+                DatabaseReference signUpRef = database.getReference("Users");
+                //signUpRef.setValue([{"email" : email}, ]);
+
+
 
 
             }
