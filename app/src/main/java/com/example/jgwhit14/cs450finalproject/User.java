@@ -36,7 +36,7 @@ public class User {
 
         mDatabase.child("users").child(user.email).child("name").setValue(user.name);
         mDatabase.child("users").child(user.email).child("password").setValue(user.password);
-
+        mDatabase.child("users").child(user.email).child("email").setValue(user.email);
 
     }
 
