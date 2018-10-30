@@ -1,5 +1,6 @@
 package com.example.jgwhit14.cs450finalproject;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        database  = FirebaseDatabase.getInstance();
+
 
         signupBtn = findViewById(R.id.signUpBtn);
         loginBtn = findViewById(R.id.loginBtn);
@@ -37,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
         signUpPW1 = findViewById(R.id.signUpPW1);
         signUpPW2 = findViewById(R.id.signUpPW2);
 
-
-        database  = FirebaseDatabase.getInstance();
 
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,5 +91,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void map (View view){
+
+        Intent intent = new Intent(this,MapsActivity.class);
+        startActivity(intent);
     }
 }
