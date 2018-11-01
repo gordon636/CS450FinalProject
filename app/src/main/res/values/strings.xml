@@ -19,4 +19,5 @@
     <string name="invalidEmail">Invalid Email!</string>
     <string name="passwordLenError">Password must be at least 4 characters!</string>
     <string name="emailUsedError">Email already used! Pick Another!</string>
+    <string name="text_item">text_item</string>
 </resources>
