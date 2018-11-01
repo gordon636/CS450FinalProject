@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@android:drawable/title_bar"
         android:orientation="horizontal">
 
         <TextView
@@ -88,5 +89,14 @@
         android:layout_above="@+id/layoutButtons"
         android:layout_below="@+id/textViewLocation"
         tools:context=".MapsActivity" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/map"
+        android:layout_margin="10dp"
+        android:src="@drawable/location" />
 
 </RelativeLayout>

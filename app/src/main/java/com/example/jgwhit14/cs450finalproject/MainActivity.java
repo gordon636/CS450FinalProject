@@ -28,8 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Boolean loginFound = false;
     private String loggedInEmail = null;
     private SharedPreferences pref;
-    private SharedPreferences.Editor editor = pref.edit();
-
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         pref = getApplicationContext().getSharedPreferences("Profile",0);
-
+        editor = pref.edit();
         database  = FirebaseDatabase.getInstance();
 
 
