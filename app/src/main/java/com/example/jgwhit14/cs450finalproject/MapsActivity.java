@@ -215,19 +215,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void save (View view){
 
-        String lon = String.valueOf(currentLocation.getLatitude());
-        String lat = String.valueOf(currentLocation.getLongitude());
-        //save current location
-        Toast.makeText(getApplicationContext(),"Location Saved!",Toast.LENGTH_LONG).show();
-        DatabaseReference AddLocation = FirebaseDatabase.getInstance().getReference();
+        Toast.makeText(getApplicationContext(),"Waiting for gps, please wait!",Toast.LENGTH_LONG).show();
 
-        myList.add(currentLocation);
+        if(loaded) {
 
-       // AddLocation.child("users").child("d").child("locations").child(myList.get(myList.indexOf(currentLocation)).toString()).setValue(lat + ", " + lon);
+            String lon = String.valueOf(currentLocation.getLatitude());
+            String lat = String.valueOf(currentLocation.getLongitude());
+            //save current location
+            Toast.makeText(getApplicationContext(),"Location Saved!",Toast.LENGTH_LONG).show();
+            DatabaseReference AddLocation = FirebaseDatabase.getInstance().getReference();
+
+            myList.add(currentLocation);
+
+            // AddLocation.child("users").child("d").child("locations").child(myList.get(myList.indexOf(currentLocation)).toString()).setValue(lat + ", " + lon);
 
 
-        Intent intent = new Intent(this,SaveLocation.class);
-        startActivity(intent);
+            Intent intent = new Intent(this,SaveLocation.class);
+            startActivity(intent);
+        }
+
     }
 
     public void myRefreshLocation (View view){

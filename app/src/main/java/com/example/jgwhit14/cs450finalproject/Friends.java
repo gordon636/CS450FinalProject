@@ -57,7 +57,7 @@ public class Friends extends AppCompatActivity {
 
     public void locations (View view){
 
-        Intent intent = new Intent(this, MyLocationsObject.class);
+        Intent intent = new Intent(this, MyLocations.class);
         startActivity(intent);
 
     }

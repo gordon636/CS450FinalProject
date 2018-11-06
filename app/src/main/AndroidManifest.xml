@@ -26,6 +26,12 @@
 
         <activity android:name=".MyLocations" />
         <activity android:name=".Friends"></activity>
+
+        <activity android:name=".MyFriendsLocations"></activity>
+
+        <activity android:name=".SaveLocation"
+            android:theme="@style/Base.Theme.AppCompat.Dialog">
+        </activity>
     </application>
 
 </manifest>
