@@ -24,9 +24,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Friends" />
         <activity android:name=".MyLocations" />
-        <activity android:name=".MyFriendsLocations"></activity>
+        <activity android:name=".Friends"></activity>
     </application>
 
 </manifest>

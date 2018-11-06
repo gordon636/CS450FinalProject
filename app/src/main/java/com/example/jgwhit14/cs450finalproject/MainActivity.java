@@ -124,13 +124,13 @@ public class MainActivity extends AppCompatActivity {
 
 
                 // Test for invalid email
+
                 if (!email.contains("@")){
                     invalidEmail.setVisibility(View.VISIBLE);
                     invalidEmail.setTextColor(getResources().getColor(R.color.error));
                     signUpEmail.setTextColor(getResources().getColor(R.color.error));
                     return;
                 }
-
                 // Test to see if email is available
                 DatabaseReference emailRef = database.getReference("users");
                 emailRef.addListenerForSingleValueEvent(new ValueEventListener() {
