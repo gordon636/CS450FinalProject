@@ -12,31 +12,28 @@ public class User {
     public String email;
     public String password;
     public String name;
+    public String username;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
     // For creating new users
-    public User(String email, String password, String name) {
+    public User(String email, String password, String name, String username) {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.username = username;
     }
 
-    // For importing into the DB
-    private User(String password, String name){
-        this.password = password;
-        this.name = name;
-    }
 
     public void writeNewUser(User user) {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mDatabase.child("users").child(user.email).child("name").setValue(user.name);
-        mDatabase.child("users").child(user.email).child("password").setValue(user.password);
-        mDatabase.child("users").child(user.email).child("email").setValue(user.email);
+        mDatabase.child("users").child(user.username).child("name").setValue(user.name);
+        mDatabase.child("users").child(user.username).child("password").setValue(user.password);
+        mDatabase.child("users").child(user.username).child("email").setValue(user.email);
 
     }
 

@@ -13,12 +13,18 @@
         android:layout_height="wrap_content"
         android:text="Login" />
 
+    <TextView
+        android:id="@+id/loginError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wrong username or password!" />
+
     <EditText
-        android:id="@+id/loginEmail"
+        android:id="@+id/loginUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="E-mail"
+        android:hint="Username"
         android:inputType="textPersonName" />
 
     <EditText
@@ -41,6 +47,32 @@
         android:layout_height="wrap_content"
         android:text="Sign-up" />
 
+    <TextView
+        android:id="@+id/usernameTaken"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Username Taken!" />
+
+    <EditText
+        android:id="@+id/signUpUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/invalidEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Not a valid Email!" />
+
+    <TextView
+        android:id="@+id/emailUsed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email already being used" />
+
     <EditText
         android:id="@+id/signUpEmail"
         android:layout_width="match_parent"
@@ -53,6 +85,12 @@
         android:layout_height="45dp"
         android:hint="Name" />
 
+    <TextView
+        android:id="@+id/pwLenError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Password Must be at least 4 characters" />
+
     <EditText
         android:id="@+id/signUpPW1"
         android:layout_width="match_parent"
@@ -60,6 +98,12 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/pwNoMatch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Passwords don't match" />
 
     <EditText
         android:id="@+id/signUpPW2"

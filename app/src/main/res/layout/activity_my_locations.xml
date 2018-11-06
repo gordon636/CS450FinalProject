@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyLocations">
+    tools:context=".MyLocationsObject">
 
     <LinearLayout
         android:id="@+id/layoutButtons"
@@ -38,6 +38,7 @@
             android:layout_weight="1"
             android:background="@android:color/holo_blue_bright"
             android:gravity="center_horizontal"
+            android:onClick="friends"
             android:padding="10dp"
             android:text="Friends Locations"
             android:textColor="@android:color/background_dark" />
@@ -80,6 +81,7 @@
         android:textColor="@android:color/background_light" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recylcerViewLoactions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/layoutButtons"

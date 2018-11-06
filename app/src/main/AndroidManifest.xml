@@ -25,9 +25,7 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".MyLocations" />
-        <activity android:name=".Friends" />
-        <activity android:name=".SaveLocation"
-            android:theme="@style/Base.Theme.AppCompat.Dialog" />
+        <activity android:name=".Friends"></activity>
     </application>
 
 </manifest>
