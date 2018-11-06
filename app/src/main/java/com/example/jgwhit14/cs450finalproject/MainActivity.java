@@ -60,13 +60,13 @@ public class MainActivity extends AppCompatActivity {
                 String password2 = signUpPW2.getText().toString();
 
                 // Test for invalid email
+
                 if (!email.contains("@")){
                     signUpEmail.setText("");
                     signUpEmail.setHint(R.string.invalidEmail);
                     signUpEmail.setHintTextColor(getResources().getColor(R.color.error));
                     return;
                 }
-
                 // Test to see if email is available
                 DatabaseReference myRef = database.getReference("users");
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -23,6 +24,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -33,7 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //GPS
     private ListView listView;
-    private ArrayList<String> myList;
+    private ArrayList<Location> myList;
     public double currentDistance = 0, totalDistance = 0;
     public Button myButton,resetButton;
     private Location startLocation = null;
@@ -65,7 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        myList = new ArrayList<>();
         textViewLocation = findViewById(R.id.textViewLocation);
 
         //initiate the handler
@@ -82,6 +88,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     PERMISSION_REQUEST_CODE
             );
         }
+
+        //buttons
     }
 
     //permission granted or not
@@ -171,7 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     textViewLocation.setText(holder);
 
-//                    myButton.setEnabled(true);
+                //myButton.setEnabled(true);
 
                     // Add a marker to your location and move the camera
                     LatLng myLocation = new LatLng(lat, lon);
@@ -206,7 +214,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void save (View view){
 
+        String lon = String.valueOf(currentLocation.getLatitude());
+        String lat = String.valueOf(currentLocation.getLongitude());
         //save current location
         Toast.makeText(getApplicationContext(),"Location Saved!",Toast.LENGTH_LONG).show();
+        DatabaseReference AddLocation = FirebaseDatabase.getInstance().getReference();
+
+        myList.add(currentLocation);
+
+       // AddLocation.child("users").child("d").child("locations").child(myList.get(myList.indexOf(currentLocation)).toString()).setValue(lat + ", " + lon);
+
+
+        Intent intent = new Intent(this,SaveLocation.class);
+        startActivity(intent);
     }
 }
