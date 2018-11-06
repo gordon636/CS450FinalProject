@@ -204,4 +204,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    public void save (View view){
+
+        //save current location
+        Toast.makeText(getApplicationContext(),"Location Saved!",Toast.LENGTH_LONG).show();
+    }
 }
