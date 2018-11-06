@@ -97,6 +97,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/map"
         android:layout_margin="10dp"
+        android:onClick="myRefreshLocation"
         android:src="@drawable/location" />
 
 </RelativeLayout>

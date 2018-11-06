@@ -50,6 +50,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DecimalFormat df = new DecimalFormat("0.00");
     private TextView textViewLocation;
     private boolean loaded = false;
+    private LatLng myLocation;
 
     private final static int PERMISSION_REQUEST_CODE = 999;
     private static final int REQUEST_LOCATION = 1;
@@ -174,7 +175,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                    myButton.setEnabled(true);
 
                     // Add a marker to your location and move the camera
-                    LatLng myLocation = new LatLng(lat, lon);
+                     myLocation = new LatLng(lat, lon);
 
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions().position(myLocation).title("You are Here"));
@@ -208,5 +209,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //save current location
         Toast.makeText(getApplicationContext(),"Location Saved!",Toast.LENGTH_LONG).show();
+    }
+
+    public void myRefreshLocation (View view){
+
+        //save current location
+        Toast.makeText(getApplicationContext(),"Location Refreshed!",Toast.LENGTH_LONG).show();
+
+        if(loaded) {
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+        }
     }
 }
