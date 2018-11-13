@@ -2,6 +2,7 @@ package com.example.jgwhit14.cs450finalproject;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
@@ -57,6 +58,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView textViewLocation;
     private boolean loaded = false;
     private LatLng myLocation;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
 
     private final static int PERMISSION_REQUEST_CODE = 999;
     private static final int REQUEST_LOCATION = 1;
@@ -74,7 +77,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         myList = new ArrayList<>();
         textViewLocation = findViewById(R.id.textViewLocation);
+        pref = getApplicationContext().getSharedPreferences("Profile",0);
 
+        TextView title = findViewById(R.id.textViewTitle);
+        title.setText("Where You At - "+pref.getString("Username","none"));
         //initiate the handler
         if (handler == null) {
             this.handler = new LocationHandler(this);
