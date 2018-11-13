@@ -55,7 +55,7 @@
             android:gravity="center"
             android:onClick="friends"
             android:padding="10dp"
-            android:text="Friends Locations"
+            android:text="Friends"
             android:textColor="@android:color/background_dark" />
     </LinearLayout>
 

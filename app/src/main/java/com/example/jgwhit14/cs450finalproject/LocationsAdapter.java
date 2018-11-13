@@ -1,5 +1,7 @@
 package com.example.jgwhit14.cs450finalproject;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,15 +17,18 @@ class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.ViewHolder>
 
     private List<MyLocationsObject> mDataSet;
     private String mId;
-
+    private Activity activity;
     /**
      * Called when a view has been clicked.
      *
+     * @param myLocations
      * @param dataSet Message list
      * @param id      Device id
      */
-    LocationsAdapter(List<MyLocationsObject> dataSet, String id) {
+    LocationsAdapter(Activity myLocations, List<MyLocationsObject> dataSet, String id) {
+        activity = myLocations;
         mDataSet = dataSet;
+
         mId = id;
     }
 
@@ -54,6 +59,7 @@ class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.ViewHolder>
         String time = mDataSet.get(position).time;
 
         holder.mTextView.setText("Locations: "+String.valueOf(location.getLatitude()+ ", "+location.getLongitude())+" \nDate: "+date+ " Time: "+time);
+
     }
 
     @Override
@@ -70,6 +76,15 @@ class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.ViewHolder>
         ViewHolder(View v) {
             super(v);
             mTextView = (TextView) itemView.findViewById(R.id.tvMessage);
+            mTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent(activity,SelectLocation.class);
+
+                    activity.startActivity(intent);
+                }
+            });
         }
     }
 }

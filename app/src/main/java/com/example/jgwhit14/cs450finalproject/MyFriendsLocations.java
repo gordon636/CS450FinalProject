@@ -63,7 +63,7 @@ public class MyFriendsLocations extends AppCompatActivity {
         locationsList.add(locationO2);
 
         //update recycler view adapter
-        mAdapter = new LocationsAdapter(locationsList, "test");
+        mAdapter = new LocationsAdapter(this, locationsList, "test");
         mRecyclerView.setAdapter(mAdapter);
     }
 
