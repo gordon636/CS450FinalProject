@@ -3,6 +3,7 @@ package com.example.jgwhit14.cs450finalproject;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private String loggedInUsername = null;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private Boolean signUpFail = false;
+    private Boolean signUpFail, loggedIn = null;
 
 
     @Override
@@ -77,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
 
                 signUpFail = false;
 
-                String name = signUpName.getText().toString();
+                final String name = signUpName.getText().toString();
                 final String username = signUpUsername.getText().toString();
                 final String email = signUpEmail.getText().toString();
-                String password1 = signUpPW1.getText().toString();
-                String password2 = signUpPW2.getText().toString();
+                final String password1 = signUpPW1.getText().toString();
+                final String password2 = signUpPW2.getText().toString();
 
                 // Remove error colors
                 signUpEmail.setTextColor(getResources().getColor(R.color.defaultColor));
@@ -104,11 +105,11 @@ public class MainActivity extends AppCompatActivity {
                         Iterable<DataSnapshot> usernames = dataSnapshot.getChildren();
                         for (DataSnapshot aUsername:usernames){
                             if(username.equals(aUsername.getKey())){
+                                Log.i(TAG, aUsername.getKey());
                                 userNameTaken.setVisibility(View.VISIBLE);
                                 userNameTaken.setTextColor(getResources().getColor(R.color.error));
                                 signUpUsername.setTextColor(getResources().getColor(R.color.error));
                                 signUpFail = true;
-                                return;
                             }
                         }
 
@@ -120,8 +121,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                if (signUpFail) {return;}
-
 
                 // Test for invalid email
 
@@ -129,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     invalidEmail.setVisibility(View.VISIBLE);
                     invalidEmail.setTextColor(getResources().getColor(R.color.error));
                     signUpEmail.setTextColor(getResources().getColor(R.color.error));
-                    return;
+                    signUpFail = true;
                 }
                 // Test to see if email is available
                 DatabaseReference emailRef = database.getReference("users");
@@ -145,8 +144,33 @@ public class MainActivity extends AppCompatActivity {
                                 emailUsed.setTextColor(getResources().getColor(R.color.error));
                                 signUpEmail.setTextColor(getResources().getColor(R.color.error));
                                 signUpFail = true;
-                                return;
                             }
+                        }
+
+                        // Passwords aren't equal --> don't allow login
+                        if(!password1.equals(password2)){
+                            pwNoMatch.setTextColor(getResources().getColor(R.color.error));
+                            pwNoMatch.setVisibility(View.VISIBLE);
+                            signUpPW2.setTextColor(getResources().getColor(R.color.error));
+                            signUpFail = true;
+                        }
+
+                        if(password1.length() < 4){
+                            pwLenError.setVisibility(View.VISIBLE);
+                            pwLenError.setTextColor(getResources().getColor(R.color.error));
+                            signUpPW1.setTextColor(getResources().getColor(R.color.error));
+                            signUpPW2.setTextColor(getResources().getColor(R.color.error));
+                            signUpFail = true;
+                        }
+                        if(!signUpFail) {
+                            User user = new User(email, password1, name, username);
+                            user.writeNewUser(user);
+
+                            System.out.println("Sign-up Successful");
+                            // If code reaches here, username not taken
+                            loggedInUsername = username;
+                            editor.putString("Username", loggedInUsername).apply();
+                            map();
                         }
                     }
 
@@ -156,33 +180,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                if(signUpFail){return;}
 
-
-                // Passwords aren't equal --> don't allow login
-                if(!password1.equals(password2)){
-                    pwNoMatch.setTextColor(getResources().getColor(R.color.error));
-                    pwNoMatch.setVisibility(View.VISIBLE);
-                    signUpPW2.setTextColor(getResources().getColor(R.color.error));
-                    return;
-                }
-
-                if(password1.length() < 4){
-                    pwLenError.setVisibility(View.VISIBLE);
-                    pwLenError.setTextColor(getResources().getColor(R.color.error));
-                    signUpPW1.setTextColor(getResources().getColor(R.color.error));
-                    signUpPW2.setTextColor(getResources().getColor(R.color.error));
-                    return;
-                }
-
-                User user = new User(email, password1, name, username);
-                user.writeNewUser(user);
-
-                System.out.println("Sign-up Successful");
-                // If code reaches here, username not taken
-                loggedInUsername = username;
-                editor.putString("Username", loggedInUsername).apply();
-                return;
 
             }
         });
@@ -192,8 +190,6 @@ public class MainActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                signUpFail = false;
 
                 loginError.setVisibility(View.INVISIBLE);
                 loginUsername.setTextColor(getResources().getColor(R.color.defaultColor));
@@ -209,24 +205,29 @@ public class MainActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                         Iterable<DataSnapshot> users = dataSnapshot.getChildren();
+                        signUpFail = true;
 
                         for (DataSnapshot user:users){
-
+                            String usernameP = user.getKey();
                             User loginUser = user.getValue(User.class);
-                            Log.i(TAG, loginUser.username);
 
-                            if(username.equals(loginUser.username) && password.equals(loginUser.password)){
+                            if(username.equals(usernameP) && password.equals(loginUser.password)){
                                 System.out.println("Login Success");
                                 loggedInUsername = username;
                                 editor.putString("Username", loggedInUsername).apply();
-                                return;
+                                signUpFail = false;
                             }
                         }
 
-                        System.out.println("Login Failed!  User doesn't exists");
-                        loginError.setVisibility(View.VISIBLE);
-                        loginError.setTextColor(getResources().getColor(R.color.error));
-                        loginUsername.setTextColor(getResources().getColor(R.color.error));
+                        if(!signUpFail){
+                            map();
+                        } else {
+                            System.out.println("Login Failed!  User doesn't exists");
+                            loginError.setVisibility(View.VISIBLE);
+                            loginError.setTextColor(getResources().getColor(R.color.error));
+                            loginUsername.setTextColor(getResources().getColor(R.color.error));
+                        }
+
 
                     }
 
@@ -234,18 +235,18 @@ public class MainActivity extends AppCompatActivity {
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
-                });
 
+                });
             }
         });
 
-        return;
 
     }
 
-    public void map (View view){
+    public void map (){
+        System.out.println("Almost there");
 
-        Intent intent = new Intent(this,MapsActivity.class);
+        Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
 }
