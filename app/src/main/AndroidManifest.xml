@@ -26,13 +26,13 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".MyLocations" />
-        <activity android:name=".Friends"></activity>
-
-        <activity android:name=".MyFriendsLocations"></activity>
-
-        <activity android:name=".SaveLocation"
-            android:theme="@style/Base.Theme.AppCompat.Dialog">
-        </activity>
+        <activity android:name=".Friends" />
+        <activity android:name=".MyFriendsLocations" />
+        <activity
+            android:name=".SaveLocation"
+            android:theme="@style/Base.Theme.AppCompat.Dialog"></activity>
+        <activity android:name=".SelectLocation"
+            android:theme="@style/Base.Theme.AppCompat.Dialog"></activity>
     </application>
 
 </manifest>
