@@ -124,5 +124,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="map"
-        android:text="Goto Map" />
+        android:text="GotoMap" />
 </LinearLayout>
