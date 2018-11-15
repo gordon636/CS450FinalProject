@@ -51,19 +51,42 @@ public class MyLocations extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 Iterable<DataSnapshot> users = dataSnapshot.getChildren();
-
                 for (DataSnapshot user:users){
                     String usernameP = user.getKey();
                     //loggedInUser
-                    if(usernameP.equals("wazzzaonthebeat")){
+                    if(usernameP.equals(loggedInUser)){
                         User loginUser = user.getValue(User.class);
-                        String userLocations = loginUser.locations;
+                        ArrayList<String> userLocations = loginUser.locations;
                         System.out.println("LOCATIONS: " + userLocations);
+
+
+
+                        for(String aLocation:userLocations){
+                            if(aLocation == null){
+                                continue;
+                            }
+                            String[] aLocationArr = aLocation.split("mySPLIT");
+
+                            Location location = new Location("");
+                            location.setLatitude(Double.parseDouble(aLocationArr[0]));
+                            location.setLongitude(Double.parseDouble(aLocationArr[1]));
+
+                            MyLocationsObject locationToList = new MyLocationsObject("wazzza", location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
+
+                            locationsList.add(locationToList);
+                        }
+
+
+                        break;
                     }
 
 
 
                 }
+
+                //update recycler view adapter
+                mAdapter = new LocationsAdapter(MyLocations.this, locationsList, "test");
+                mRecyclerView.setAdapter(mAdapter);
             }
 
             @Override
@@ -72,25 +95,6 @@ public class MyLocations extends AppCompatActivity {
             }
         });
 
-
-        Location location1 = new Location("");
-        location1.setLatitude(0);
-        location1.setLongitude(0);
-
-        Location location2 = new Location("");
-        location2.setLatitude(10);
-        location2.setLongitude(15);
-
-
-        MyLocationsObject locationO1 = new MyLocationsObject("wazzza",location1,"01/12/18","8.15pm");
-        MyLocationsObject locationO2 = new MyLocationsObject("gordon",location2,"01/12/18","8.15pm");
-
-        locationsList.add(locationO1);
-        locationsList.add(locationO2);
-
-        //update recycler view adapter
-        mAdapter = new LocationsAdapter(this,locationsList, "test");
-        mRecyclerView.setAdapter(mAdapter);
     }
 
     public void share (View view){

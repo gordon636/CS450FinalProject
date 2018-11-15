@@ -4,6 +4,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 @IgnoreExtraProperties
 public class User {
 
@@ -13,7 +16,7 @@ public class User {
     public String password;
     public String name;
     public String username;
-    public String locations;
+    public ArrayList<String> locations;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)

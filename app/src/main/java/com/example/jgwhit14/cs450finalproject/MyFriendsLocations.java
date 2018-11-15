@@ -41,30 +41,30 @@ public class MyFriendsLocations extends AppCompatActivity {
 
 
 
-        Location location1 = new Location("");
-        location1.setLatitude(0);
-        location1.setLongitude(0);
-
-        Location location2 = new Location("");
-        location2.setLatitude(10);
-        location2.setLongitude(15);
-
-
-        //retrieve locations from firebase and create MyLocationsObject objects
-
-        MyLocationsObject locationO1 = new MyLocationsObject("wazzza",location1,"01/12/18","8.15pm");
-        MyLocationsObject locationO2 = new MyLocationsObject("gordon",location2,"01/12/18","8.15pm");
-
-        locationsList.add(locationO1);
-        locationsList.add(locationO2);
-        locationsList.add(locationO1);
-        locationsList.add(locationO2);
-        locationsList.add(locationO1);
-        locationsList.add(locationO2);
-
-        //update recycler view adapter
-        mAdapter = new LocationsAdapter(this, locationsList, "test");
-        mRecyclerView.setAdapter(mAdapter);
+//        Location location1 = new Location("");
+//        location1.setLatitude(0);
+//        location1.setLongitude(0);
+//
+//        Location location2 = new Location("");
+//        location2.setLatitude(10);
+//        location2.setLongitude(15);
+//
+//
+//        //retrieve locations from firebase and create MyLocationsObject objects
+//
+//        MyLocationsObject locationO1 = new MyLocationsObject("wazzza",location1,"01/12/18","8.15pm");
+//        MyLocationsObject locationO2 = new MyLocationsObject("gordon",location2,"01/12/18","8.15pm");
+//
+//        locationsList.add(locationO1);
+//        locationsList.add(locationO2);
+//        locationsList.add(locationO1);
+//        locationsList.add(locationO2);
+//        locationsList.add(locationO1);
+//        locationsList.add(locationO2);
+//
+//        //update recycler view adapter
+//        mAdapter = new LocationsAdapter(this, locationsList, "test");
+//        mRecyclerView.setAdapter(mAdapter);
     }
 
     public void share (View view){
