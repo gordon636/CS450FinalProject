@@ -244,8 +244,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void map (){
-        System.out.println("Almost there");
-
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
