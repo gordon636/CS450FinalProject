@@ -18,7 +18,7 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textView16"
+        android:id="@+id/textViewCoordinates"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -35,7 +35,7 @@
         android:text="Nickname" />
 
     <EditText
-        android:id="@+id/editTextName4"
+        android:id="@+id/editTextNickname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -54,7 +54,7 @@
         android:text="Note" />
 
     <EditText
-        android:id="@+id/editTextName3"
+        android:id="@+id/editTextNote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
