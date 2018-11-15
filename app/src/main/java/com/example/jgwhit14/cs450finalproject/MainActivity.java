@@ -78,9 +78,9 @@ public class MainActivity extends AppCompatActivity {
 
                 signUpFail = false;
 
-                final String name = signUpName.getText().toString();
-                final String username = signUpUsername.getText().toString();
-                final String email = signUpEmail.getText().toString();
+                final String name = signUpName.getText().toString().trim();
+                final String username = signUpUsername.getText().toString().trim();
+                final String email = signUpEmail.getText().toString().trim();
                 final String password1 = signUpPW1.getText().toString();
                 final String password2 = signUpPW2.getText().toString();
 
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 loginUsername.setTextColor(getResources().getColor(R.color.defaultColor));
 
                 //save variables entered to strings
-                final String username = loginUsername.getText().toString();
+                final String username = loginUsername.getText().toString().trim();
                 final String password = loginPW.getText().toString();
 
                 //match the password to

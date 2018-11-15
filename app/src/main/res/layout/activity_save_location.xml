@@ -62,7 +62,9 @@
         android:ems="10"
         android:hint="Short description about your experience here"
         android:inputType="textPersonName"
-        android:lines="3" />
+        android:lines="3"
+        android:maxHeight="3dp"
+        android:minLines="3" />
 
     <TextView
         android:id="@+id/textView17"

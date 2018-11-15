@@ -29,8 +29,10 @@
         <activity android:name=".Friends" />
         <activity android:name=".MyFriendsLocations" />
         <activity android:name=".SaveLocation"
+            android:label="Save Location"
             android:theme="@style/Base.Theme.AppCompat.Dialog"></activity>
         <activity android:name=".SelectLocation"
+            android:label="View Location"
             android:theme="@style/Base.Theme.AppCompat.Dialog"></activity>
     </application>
 
