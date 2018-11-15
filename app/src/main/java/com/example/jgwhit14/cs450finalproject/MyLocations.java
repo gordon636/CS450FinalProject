@@ -71,7 +71,7 @@ public class MyLocations extends AppCompatActivity {
                             location.setLatitude(Double.parseDouble(aLocationArr[0]));
                             location.setLongitude(Double.parseDouble(aLocationArr[1]));
 
-                            MyLocationsObject locationToList = new MyLocationsObject("wazzza", location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
+                            MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
 
                             locationsList.add(locationToList);
                         }

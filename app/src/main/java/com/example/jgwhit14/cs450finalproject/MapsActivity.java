@@ -22,6 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -64,6 +65,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final static int PERMISSION_REQUEST_CODE = 999;
     private static final int REQUEST_LOCATION = 1;
     private final static String LOGTAG = MapsActivity.class.getSimpleName();
+    private ArrayList locationsList;
+    private FirebaseDatabase database;
+    private String loggedInUser;
 
     private GoogleMap mMap;
 
@@ -95,6 +99,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     PERMISSION_REQUEST_CODE
             );
         }
+
+        loadPointers();
 
         //buttons
     }
@@ -191,9 +197,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Add a marker to your location and move the camera
                      myLocation = new LatLng(lat, lon);
 
-                    mMap.clear();
+                   mMap.clear();
                     mMap.addMarker(new MarkerOptions().position(myLocation).title("You are Here"));
-
+                    loadPointers(); //TODO WE NEED TO GET RID OF THIS!!! SO WE DONT CONNECT TO FIREBASE ALL THE TIME
                     if(!loaded) {
 
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
@@ -255,4 +261,65 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
         }
     }
-}
+
+    public void loadPointers (){
+
+
+        database  = FirebaseDatabase.getInstance();
+        pref = getApplicationContext().getSharedPreferences("Profile",0);
+        loggedInUser = pref.getString("Username","none");
+
+        //retrieve locations from Firebase and create MyLocationsObject objects
+        DatabaseReference loginRef = database.getReference("users");
+        loginRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Iterable<DataSnapshot> users = dataSnapshot.getChildren();
+                for (DataSnapshot user:users){
+                    String usernameP = user.getKey();
+                    //loggedInUser
+                    if(usernameP.equals(loggedInUser)){
+                        User loginUser = user.getValue(User.class);
+                        ArrayList<String> userLocations = loginUser.locations;
+                        System.out.println("LOCATIONS: " + userLocations);
+
+
+
+                        for(String aLocation:userLocations){
+                            if(aLocation == null){
+                                continue;
+                            }
+                            String[] aLocationArr = aLocation.split("mySPLIT");
+
+                            Location location = new Location("");
+                            location.setLatitude(Double.parseDouble(aLocationArr[0]));
+                            location.setLongitude(Double.parseDouble(aLocationArr[1]));
+
+                            MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
+
+//                            locationsList.add(locationToList);
+
+                            myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            mMap.addMarker(new MarkerOptions().position(myLocation).title(aLocationArr[2]).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+                            System.out.println("Placed location");
+                        }
+
+
+                        break;
+                    }
+
+
+
+                }
+
+                ;
+            }  @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    }
+
