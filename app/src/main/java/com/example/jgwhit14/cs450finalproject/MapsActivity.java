@@ -237,6 +237,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
             Intent intent = new Intent(this,SaveLocation.class);
+            intent.putExtra("list",myList);
+            intent.putExtra("location",currentLocation);
+            intent.putExtra("Username",pref.getString("Username","none"));
             startActivity(intent);
         }
 
