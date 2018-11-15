@@ -15,7 +15,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class SaveLocation extends AppCompatActivity {
     private ArrayList<Location> myList;
@@ -35,6 +37,8 @@ public class SaveLocation extends AppCompatActivity {
         myList = i.getParcelableArrayListExtra("list");
         myList.add(currentLocation);
 
+
+
         TextView coordinates = findViewById(R.id.textViewCoordinates);
         coordinates.setText(currentLocation.getLatitude()+ ","+currentLocation.getLongitude()
         );
@@ -52,9 +56,22 @@ public class SaveLocation extends AppCompatActivity {
                 String realName = "realName";
                 String note = Note.getText().toString();
 
+                //Repeater
+                Calendar c = Calendar.getInstance();
+                System.out.println("Current time =&gt; " + c.getTime());
+
+                SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy");
+                String formattedDate = df.format(c.getTime());
+                SimpleDateFormat time = new SimpleDateFormat("hh:mm");
+                String formattedTime = time.format(c.getTime());
+
+
+
+
                 AddLocation.child("users").child(username).child("locations").child(Integer.toString(
-                        (myList.indexOf(currentLocation)))).setValue(currentLocation.getLatitude() + ")(" + currentLocation.getLongitude()+")("+nickname+")("+realName+")("+note);
+                        (myList.indexOf(currentLocation)))).setValue(currentLocation.getLatitude() + "mySPLIT" + currentLocation.getLongitude()+"mySPLIT"+nickname+"mySPLIT"+realName+"mySPLIT"+note+"mySPLIT"+formattedDate+"mySPLIT"+formattedTime);
                 finish();
+                //"44.5878623)(-75.1610814)(wazzza)(realName)(john )(15 Nov 2018)(11:15"
                 Toast.makeText(getApplicationContext(),"Location Saved!",Toast.LENGTH_LONG).show();
             }
         });

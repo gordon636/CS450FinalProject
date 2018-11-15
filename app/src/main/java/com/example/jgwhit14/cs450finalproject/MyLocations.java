@@ -57,7 +57,9 @@ public class MyLocations extends AppCompatActivity {
                     //loggedInUser
                     if(usernameP.equals("wazzzaonthebeat")){
                         User loginUser = user.getValue(User.class);
-                        String userLocations = loginUser.locations;
+                       ArrayList userLocations = loginUser.locations;
+
+
                         System.out.println("LOCATIONS: " + userLocations);
                     }
 
