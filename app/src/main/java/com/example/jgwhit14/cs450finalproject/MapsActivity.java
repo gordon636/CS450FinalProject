@@ -60,6 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng myLocation;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+    private String Uname;
 
     private final static int PERMISSION_REQUEST_CODE = 999;
     private static final int REQUEST_LOCATION = 1;
@@ -75,9 +76,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //load from the database/
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        pref = getApplicationContext().getSharedPreferences("Profile",0);
+        Uname = pref.getString("Username","none");
         myList = new ArrayList<>();
         textViewLocation = findViewById(R.id.textViewLocation);
-        pref = getApplicationContext().getSharedPreferences("Profile",0);
+
+        DatabaseReference location_list = database.getReference("users").child(Uname).child("locations");
+        location_list.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> locations = dataSnapshot.getChildren();
+                for(DataSnapshot location: locations){
+                    String l = location.getValue(String.class);
+                    //myList.add(new Location());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         TextView title = findViewById(R.id.textViewTitle);
         title.setText("Where You At - "+pref.getString("Username","none"));
@@ -151,10 +174,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap = googleMap;
 
+        for(Location l: myList){
+            mMap.addMarker(new MarkerOptions().position(new LatLng(l.getLatitude(), l.getLongitude())));
+        }
+
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     @Override
@@ -239,7 +266,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Intent intent = new Intent(this,SaveLocation.class);
             intent.putExtra("list",myList);
             intent.putExtra("location",currentLocation);
-            intent.putExtra("Username",pref.getString("Username","none"));
+            intent.putExtra("Username",Uname);
             startActivity(intent);
         }
 
@@ -253,6 +280,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(loaded) {
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+            mMap.setMinZoomPreference(15.0f);
+            mMap.setMaxZoomPreference(18.0f);
+
         }
     }
 }
