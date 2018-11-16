@@ -55,10 +55,11 @@ class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.ViewHolder>
     public void onBindViewHolder(ViewHolder holder, int position) {
         Location location = mDataSet.get(position).myLocation;
         String username = mDataSet.get(position).username;
+        String title = mDataSet.get(position).title;
         String date = mDataSet.get(position).date;
         String time = mDataSet.get(position).time;
 
-        holder.mTextView.setText("Locations: "+String.valueOf(location.getLatitude()+ ", "+location.getLongitude())+" \nDate: "+date+ " Time: "+time);
+        holder.mTextView.setText("Title: "+title+"\nLocations: "+String.valueOf(location.getLatitude()+ ", "+location.getLongitude())+" \nDate: "+date+ " Time: "+time);
 
     }
 

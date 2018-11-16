@@ -10,16 +10,18 @@ public class MyLocationsObject {
     public String date;
     public String time;
     public Location myLocation;
+    public String title;
     public int id;
 
     public MyLocationsObject() {
     }
 
-    public MyLocationsObject(String username, Location myLocatoin, String date, String time) {
+    public MyLocationsObject(String username, Location myLocatoin, String date, String time, String title) {
         this.username = username;
         this.myLocation = myLocatoin;
         this.date = date;
         this.time = time;
+        this.title = title;
     }
 
     public Location getCoordinates() {
