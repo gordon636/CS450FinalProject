@@ -31,8 +31,8 @@ public class SelectLocation extends AppCompatActivity {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private String realLocation;
-
-
+    private Location currentLocation;
+    private TextView nickname,note;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +41,7 @@ public class SelectLocation extends AppCompatActivity {
         Save = findViewById(R.id.button3);
         Cancel = findViewById(R.id.button);
         final Intent i = this.getIntent();
-        final Location currentLocation = i.getExtras().getParcelable("location");
+         currentLocation = i.getExtras().getParcelable("location");
 //        System.out.println("array  "+ myList.toString());
 
 //        myList.add(currentLocation);
@@ -62,7 +62,8 @@ public class SelectLocation extends AppCompatActivity {
         TextView coordinates = findViewById(R.id.textViewCoordinates);
         coordinates.setText(currentLocation.getLatitude()+ ","+currentLocation.getLongitude());
 
-
+         nickname = findViewById(R.id.textViewNickname);
+        note = findViewById(R.id.textViewNote);
         downloadData();
     }
 
@@ -99,9 +100,14 @@ public class SelectLocation extends AppCompatActivity {
                             location.setLatitude(Double.parseDouble(aLocationArr[0]));
                             location.setLongitude(Double.parseDouble(aLocationArr[1]));
 
-                            MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
+                            if (currentLocation.getLatitude() == location.getLatitude() & currentLocation.getLongitude() == location.getLongitude()){
 
-                       //    locationsList.add(0,locationToList);//add latest one to start of list
+                                //this is the data for the selected location... set text fields
+                                nickname.setText("Nickname: "+aLocationArr[2]);
+                                note.setText("Notes: "+aLocationArr[4]);
+                            }
+
+
                         }
 
 
