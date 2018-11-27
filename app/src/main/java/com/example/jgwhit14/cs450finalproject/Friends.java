@@ -58,25 +58,22 @@ public class Friends extends AppCompatActivity {
                     //loggedInUser
                     if(usernameP.equals(loggedInUser)){
                         User loginUser = user.getValue(User.class);
-                        ArrayList<String> userLocations = loginUser.friends;
-                        System.out.println("Friends: " + userLocations);
+                        ArrayList<String> userFirends = loginUser.friends;
+                        System.out.println("Friends: " + userFirends);
 
 
-                        //check if i have friends addded
-                        if (userLocations ==null){
+                        //check if i have friends added
+                        if (userFirends != null){
 
-                            //no friends so do nothing
-                        }else{
-
-                            //hhas friends, check friend to see if they added us back if so add to my friends
+                            //has friends, check friend to see if they added us back if so add to my friends
                             Toast.makeText(Friends.this, "I have friends", Toast.LENGTH_SHORT).show();
 
-                            for(String aLocation:userLocations){
-                                if(aLocation == null){
+                            for(String aFirend:userFirends){
+                                if(aFirend == null){
                                     continue;
                                 }
-                                String[] aLocationArr = aLocation.split("mySPLIT");
-                                FriendObject friend = new FriendObject(aLocationArr[0],aLocationArr[1],aLocationArr[3]);
+                                String[] aLocationArr = aFirend.split("mySPLIT");
+                                FriendObject friend = new FriendObject(aLocationArr[0], aLocationArr[1], aLocationArr[3]);
 
                                 if (aLocationArr[3].equals("true")){
                                     friendsList.add(0,friend);//add latest one to start of list
@@ -86,11 +83,6 @@ public class Friends extends AppCompatActivity {
                             }
 
                         }
-
-
-
-
-
 
                         break;
                     }
