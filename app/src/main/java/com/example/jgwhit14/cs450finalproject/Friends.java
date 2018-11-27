@@ -1,9 +1,11 @@
 package com.example.jgwhit14.cs450finalproject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,7 +43,15 @@ public class Friends extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //mRecyclerView.setItemAnimator(new SlideInOutLeftItemAnimator(mRecyclerView));
 
+        loadFriends ();
 
+
+
+    }
+
+    private void loadFriends() {
+
+        friendsList.clear();
         database  = FirebaseDatabase.getInstance();
         pref = getApplicationContext().getSharedPreferences("Profile",0);
         loggedInUser = pref.getString("Username","none");
@@ -104,9 +114,6 @@ public class Friends extends AppCompatActivity {
 
 
 
-
-
-
     }
 
     public void share (View view){
@@ -130,8 +137,17 @@ public class Friends extends AppCompatActivity {
     public void add (View view){
 
         Intent intent = new Intent(this, AddFriend.class);
-        startActivity(intent);
+        startActivityForResult(intent,1234);
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (resultCode == Activity.RESULT_OK){
+            loadFriends();
+        }
+    }
 }
