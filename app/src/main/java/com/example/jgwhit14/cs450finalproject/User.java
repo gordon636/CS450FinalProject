@@ -18,6 +18,7 @@ public class User {
     public String username;
     public ArrayList<String> locations;
     public ArrayList<String> friends;
+    public ArrayList<String> friendRequests;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)

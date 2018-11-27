@@ -26,7 +26,6 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
    private RelativeLayout mLayout;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private String email;
 
     /**
      * Called when a view has been clicked.
@@ -43,13 +42,7 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
     @Override
     public FriendsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-
-
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat_start, parent, false);
-
-
-
-
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat_start, parent, false);
         return new ViewHolder(v);
     }
 
@@ -66,11 +59,9 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, int position) {
         String name = mDataSet.get(position).username;
         String approved = mDataSet.get(position).approved;
-        ArrayList locations = mDataSet.get(position).locations;
-
 
         holder.mTextViewUsername.setText(name);
-        System.out.println("this is the value: "+approved);
+        System.out.println("This is the value: "+approved);
         if(approved.equals("true")){
             holder.mTextViewApproved.setText("Connected!");
             mLayout.setOnClickListener(new View.OnClickListener() {
@@ -78,15 +69,11 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
                 public void onClick(View view) {
 
                     username = holder.mTextViewUsername.getText().toString();
-                    //email = mTextViewApproved.getText().toString();
-
-                    //      username = mDataSet.get(position).username;
 
                     //view friends location
                     Intent intent = new Intent(activity,MyFriendsLocations.class);
                     activity.startActivity(intent);
-                    editor.putString("clicked_username",username).apply();
-                    //  editor.putString("clicked_email",email).apply();
+                    editor.putString("clicked_username", username).apply();
                 }
             });
 
@@ -122,36 +109,12 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
             super(v);
             pref = activity.getSharedPreferences("Profile",0);
             editor = pref.edit();
-            mTextViewApproved = (TextView) v.findViewById(R.id.mTextViewEmail);
-            mTextViewUsername = (TextView) v.findViewById(R.id.mTextViewUsername);
+            mTextViewApproved = v.findViewById(R.id.mTextViewEmail);
+            mTextViewUsername = v.findViewById(R.id.mTextViewUsername);
 
             mLayout = (RelativeLayout) v.findViewById(R.id.itemLayout);
            // Toast.makeText(activity,mTextViewApproved.getText().toString(),Toast.LENGTH_LONG).show();
 
-            /*
-            if (mTextViewApproved.getText().toString().equals("Connected!")){
-                mLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        username = mTextViewUsername.getText().toString();
-                        //email = mTextViewApproved.getText().toString();
-
-                        //      username = mDataSet.get(position).username;
-
-                        //view friends location
-                        Intent intent = new Intent(activity,MyFriendsLocations.class);
-                        activity.startActivity(intent);
-                        editor.putString("clicked_username",username).apply();
-                      //  editor.putString("clicked_email",email).apply();
-                    }
-                });
-            }else{
-
-                Toast.makeText(activity,"Sorry! "+username+" has not added you back!",Toast.LENGTH_LONG).show();
-            }
-
-*/
 
         }
     }

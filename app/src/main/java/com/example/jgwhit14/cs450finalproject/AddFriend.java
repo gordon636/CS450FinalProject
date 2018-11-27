@@ -29,7 +29,7 @@ public class AddFriend extends AppCompatActivity {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private String realLocation;
-    private String friend ;
+    private String friend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class AddFriend extends AppCompatActivity {
                 final DatabaseReference AddFriend = FirebaseDatabase.getInstance().getReference();
 
                 EditText FriendUsername = findViewById(R.id.editTextNickname);
-                 friend = FriendUsername.getText().toString().trim();
+                friend = FriendUsername.getText().toString().trim();
 
 
                 database  = FirebaseDatabase.getInstance();
@@ -126,30 +126,37 @@ public class AddFriend extends AppCompatActivity {
                 for (DataSnapshot user:users){
                     String usernameP = user.getKey();
                     //loggedInUser
-                    if(usernameP.equals(loggedInUser)){ //check if this user exists
+                    if(usernameP.equals(loggedInUser)){ // Check if this user exists
 
-                        //user exists add to logged in user friend list
+                        // User exists add to logged in user's friend list
                         User loginUser = user.getValue(User.class);
                         ArrayList<String> userFriends = loginUser.friends;
+                        ArrayList<String> userFriendRequests = loginUser.friendRequests;
                         System.out.println("Friends: " + userFriends);
 
                         if (userFriends != null) {
                             AddFriend.child("users").child(loggedInUser).child("friends").child(String.valueOf(userFriends.size())).setValue(friend + "mySPLIT" +  formattedDate + "mySPLIT" + formattedTime+ "mySPLITfalse");
+                            if (userFriendRequests != null){
+                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriends.size())).setValue(loggedInUser);
+                            } else {
+                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(0)).setValue(loggedInUser);
+                            }
                             setResult(Activity.RESULT_OK);
                             finish();
 
                         }else{
-
                             AddFriend.child("users").child(loggedInUser).child("friends").child(String.valueOf(0)).setValue(friend + "mySPLIT" +  formattedDate + "mySPLIT" + formattedTime+ "mySPLITfalse");
+                            if (userFriendRequests != null){
+                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriends.size())).setValue(loggedInUser);
+                            } else {
+                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(0)).setValue(loggedInUser);
+                            }
                             setResult(Activity.RESULT_OK);
                             finish();
 
                         }
 
                     }
-
-
-
 
                 }
 
