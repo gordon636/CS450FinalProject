@@ -55,30 +55,30 @@ public class MyLocations extends AppCompatActivity {
                 for (DataSnapshot user:users){
                     String usernameP = user.getKey();
                     //loggedInUser
-                    if(usernameP.equals(loggedInUser)){
+                    if(usernameP.equals(loggedInUser)) {
                         User loginUser = user.getValue(User.class);
                         ArrayList<String> userLocations = loginUser.locations;
                         System.out.println("LOCATIONS: " + userLocations);
 
+                        if (userLocations != null) {
+                            for (String aLocation : userLocations) {
+                                if (aLocation == null) {
+                                    continue;
+                                }
+                                String[] aLocationArr = aLocation.split("mySPLIT");
 
+                                Location location = new Location("");
+                                location.setLatitude(Double.parseDouble(aLocationArr[0]));
+                                location.setLongitude(Double.parseDouble(aLocationArr[1]));
 
-                        for(String aLocation:userLocations){
-                            if(aLocation == null){
-                                continue;
+                                MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
+
+                                locationsList.add(0, locationToList);//add latest one to start of list
                             }
-                            String[] aLocationArr = aLocation.split("mySPLIT");
 
-                            Location location = new Location("");
-                            location.setLatitude(Double.parseDouble(aLocationArr[0]));
-                            location.setLongitude(Double.parseDouble(aLocationArr[1]));
 
-                            MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
-
-                            locationsList.add(0,locationToList);//add latest one to start of list
+                            break;
                         }
-
-
-                        break;
                     }
 
 
