@@ -1,13 +1,17 @@
 package com.example.jgwhit14.cs450finalproject;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -25,6 +29,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,10 +37,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, Observer {
 
@@ -61,7 +70,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng myLocation;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private String Uname;
 
     private final static int PERMISSION_REQUEST_CODE = 999;
     private static final int REQUEST_LOCATION = 1;
@@ -72,6 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
 
+    private  Marker MyLocationMarker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,31 +89,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        //load from the database/
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        pref = getApplicationContext().getSharedPreferences("Profile",0);
-        Uname = pref.getString("Username","none");
         myList = new ArrayList<>();
         textViewLocation = findViewById(R.id.textViewLocation);
-
-        DatabaseReference location_list = database.getReference("users").child(Uname).child("locations");
-        location_list.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> locations = dataSnapshot.getChildren();
-                for(DataSnapshot location: locations){
-                    String l = location.getValue(String.class);
-                    //myList.add(new Location());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+        pref = getApplicationContext().getSharedPreferences("Profile",0);
 
         TextView title = findViewById(R.id.textViewTitle);
         title.setText("Where You At - "+pref.getString("Username","none"));
@@ -123,7 +110,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             );
         }
 
-        loadPointers();
 
         //buttons
     }
@@ -180,14 +166,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap = googleMap;
 
-        for(Location l: myList){
-            mMap.addMarker(new MarkerOptions().position(new LatLng(l.getLatitude(), l.getLongitude())));
-        }
-
         // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     @Override
@@ -214,8 +196,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                  //   String holder = "Your Current Location: "+currentLocation.getLatitude() + ", "+currentLocation.getLongitude()+
                    //         "\nInstantaneous Velocity: "+df.format(Double.valueOf(instantVel))+ " m/s" + "\nOverall Velocity: "+df.format(Double.valueOf(overalVelocity))+ " m/s";
+                    String realLocation = "Unknown Location";
+                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                    try {
+                        List<Address> listAddresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
+                        if(null!=listAddresses&&listAddresses.size()>0){
+                            realLocation = listAddresses.get(0).getAddressLine(0);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    String holder = "Your Current Location: "+currentLocation.getLatitude() + ", "+currentLocation.getLongitude();
+                    String holder = realLocation+"\n- "+currentLocation.getLatitude() + ", "+currentLocation.getLongitude();
 
                     textViewLocation.setText(holder);
 
@@ -224,12 +216,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Add a marker to your location and move the camera
                      myLocation = new LatLng(lat, lon);
 
-                   mMap.clear();
-                    mMap.addMarker(new MarkerOptions().position(myLocation).title("You are Here"));
-                    loadPointers(); //TODO WE NEED TO GET RID OF THIS!!! SO WE DONT CONNECT TO FIREBASE ALL THE TIME
+                   //mMap.clear();
+                    MarkerOptions myLocationMarkerOptions = new MarkerOptions().position(myLocation).title("You are Here");
+
+                    if (MyLocationMarker == null){
+                        MyLocationMarker =mMap.addMarker(myLocationMarkerOptions);
+                    }else{
+                        MyLocationMarker.remove();
+                        MyLocationMarker =mMap.addMarker(myLocationMarkerOptions);
+                    }
+
+
                     if(!loaded) {
 
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                        loadPointers();
                     }
                     loaded=true;
 
@@ -264,19 +265,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Toast.makeText(getApplicationContext(),"Location Saved!",Toast.LENGTH_LONG).show();
             DatabaseReference AddLocation = FirebaseDatabase.getInstance().getReference();
 
-            myList.add(currentLocation);
+//
 
             // AddLocation.child("users").child("d").child("locations").child(myList.get(myList.indexOf(currentLocation)).toString()).setValue(lat + ", " + lon);
 
 
             Intent intent = new Intent(this,SaveLocation.class);
-            intent.putExtra("list",myList);
             intent.putExtra("location",currentLocation);
-            intent.putExtra("Username",Uname);
-            startActivity(intent);
+            intent.putExtra("Username",pref.getString("Username","none"));
+            //startActivity(intent);
+            startActivityForResult(intent,1234);
         }
 
+
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+            if (resultCode == Activity.RESULT_OK){
+                loadPointers();
+            }
+         }
 
     public void myRefreshLocation (View view){
 
@@ -286,9 +299,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(loaded) {
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
-            mMap.setMinZoomPreference(15.0f);
-            mMap.setMaxZoomPreference(18.0f);
-
         }
     }
 
@@ -315,9 +325,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         System.out.println("LOCATIONS: " + userLocations);
 
 
+                        if (userLocations !=null){
 
-                        for(String aLocation:userLocations){
-                            if(aLocation == null){
+
+
+
+
+
+                        for(String aLocation:userLocations) {
+                            if (aLocation == null) {
                                 continue;
                             }
                             String[] aLocationArr = aLocation.split("mySPLIT");
@@ -326,14 +342,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             location.setLatitude(Double.parseDouble(aLocationArr[0]));
                             location.setLongitude(Double.parseDouble(aLocationArr[1]));
 
+                            myList.add(location);
+
                             MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
 
 //                            locationsList.add(locationToList);
 
                             myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.addMarker(new MarkerOptions().position(myLocation).title(aLocationArr[2]).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                            final Marker marker = mMap.addMarker(new MarkerOptions().position(myLocation).title(aLocationArr[2]).icon(BitmapDescriptorFactory.defaultMarker(randomColor())));
+
+                            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                @Override
+                                public boolean onMarkerClick(Marker aMarker) {
+
+                                    if (aMarker == marker) {
+                                        Toast.makeText(getApplicationContext(), "Marker Clicked", Toast.LENGTH_LONG).show();
+                                    }
+                                    return false;
+                                }
+                            });
 
                             System.out.println("Placed location");
+                        }
                         }
 
 
@@ -351,5 +381,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+
+    private float randomColor() {
+
+        Random random = new Random();
+
+        int myChoice = random.nextInt(8);
+
+        switch (myChoice){
+
+            case 0: return BitmapDescriptorFactory.HUE_ORANGE;
+            case 1: return BitmapDescriptorFactory.HUE_AZURE;
+            case 2: return BitmapDescriptorFactory.HUE_CYAN;
+            case 3: return BitmapDescriptorFactory.HUE_MAGENTA;
+            case 4: return BitmapDescriptorFactory.HUE_GREEN;
+            case 5: return BitmapDescriptorFactory.HUE_ROSE;
+            case 6: return BitmapDescriptorFactory.HUE_VIOLET;
+            case 7: return BitmapDescriptorFactory.HUE_YELLOW;
+
+            default: return BitmapDescriptorFactory.HUE_ORANGE;
+        }
+
+
     }
+}
 

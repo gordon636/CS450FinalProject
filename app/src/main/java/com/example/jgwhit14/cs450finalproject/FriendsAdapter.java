@@ -2,6 +2,7 @@ package com.example.jgwhit14.cs450finalproject;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
      * @param id      Device id
      * @param
      */
-    FriendsAdapter(List<FriendObject> dataSet, String id, Friends activity) {
+    FriendsAdapter(ArrayList<FriendObject> dataSet, String id, Friends activity) {
         mDataSet = dataSet;
         mId = id;
         this.activity = activity;
@@ -63,13 +65,44 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         String name = mDataSet.get(position).username;
-        String email = mDataSet.get(position).email;
+        String approved = mDataSet.get(position).approved;
         ArrayList locations = mDataSet.get(position).locations;
 
 
         holder.mTextViewUsername.setText(name);
-        holder.mTextViewEmail.setText("Email: "+email);
+        System.out.println("this is the value: "+approved);
+        if(approved.equals("true")){
+            holder.mTextViewApproved.setText("Connected!");
+            mLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
+                    username = holder.mTextViewUsername.getText().toString();
+                    //email = mTextViewApproved.getText().toString();
+
+                    //      username = mDataSet.get(position).username;
+
+                    //view friends location
+                    Intent intent = new Intent(activity,MyFriendsLocations.class);
+                    activity.startActivity(intent);
+                    editor.putString("clicked_username",username).apply();
+                    //  editor.putString("clicked_email",email).apply();
+                }
+            });
+
+        }else {
+            holder.mTextViewApproved.setText("Not Connected!");
+            mLayout.setBackgroundColor(Color.GRAY);
+            mLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    username = holder.mTextViewUsername.getText().toString();
+
+                    Toast.makeText(activity,"Sorry! "+username+" has not added you back!",Toast.LENGTH_LONG).show();
+                }
+            });
+
+        }
 
     }
 
@@ -82,35 +115,43 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
      * Inner Class for a recycler view
      */
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mTextViewEmail,mTextViewUsername;
+        private  TextView mTextViewUsername,mTextViewApproved;
+
 
         ViewHolder(View v) {
             super(v);
             pref = activity.getSharedPreferences("Profile",0);
             editor = pref.edit();
-            mTextViewEmail = (TextView) itemView.findViewById(R.id.mTextViewEmail);
-            mTextViewUsername = (TextView) itemView.findViewById(R.id.mTextViewUsername);
+            mTextViewApproved = (TextView) v.findViewById(R.id.mTextViewEmail);
+            mTextViewUsername = (TextView) v.findViewById(R.id.mTextViewUsername);
 
             mLayout = (RelativeLayout) v.findViewById(R.id.itemLayout);
+           // Toast.makeText(activity,mTextViewApproved.getText().toString(),Toast.LENGTH_LONG).show();
 
+            /*
+            if (mTextViewApproved.getText().toString().equals("Connected!")){
+                mLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
+                        username = mTextViewUsername.getText().toString();
+                        //email = mTextViewApproved.getText().toString();
 
-            mLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                        //      username = mDataSet.get(position).username;
 
-                    username = mTextViewUsername.getText().toString();
-                    email = mTextViewEmail.getText().toString();
+                        //view friends location
+                        Intent intent = new Intent(activity,MyFriendsLocations.class);
+                        activity.startActivity(intent);
+                        editor.putString("clicked_username",username).apply();
+                      //  editor.putString("clicked_email",email).apply();
+                    }
+                });
+            }else{
 
-              //      username = mDataSet.get(position).username;
+                Toast.makeText(activity,"Sorry! "+username+" has not added you back!",Toast.LENGTH_LONG).show();
+            }
 
-                    //view friends location
-                    Intent intent = new Intent(activity,MyFriendsLocations.class);
-                    activity.startActivity(intent);
-                    editor.putString("clicked_username",username).apply();
-                    editor.putString("clicked_email",email).apply();
-                }
-            });
+*/
 
         }
     }

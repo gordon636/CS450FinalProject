@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class MyLocations extends AppCompatActivity {
 
@@ -73,7 +74,7 @@ public class MyLocations extends AppCompatActivity {
 
                             MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
 
-                            locationsList.add(locationToList);
+                            locationsList.add(0,locationToList);//add latest one to start of list
                         }
 
 

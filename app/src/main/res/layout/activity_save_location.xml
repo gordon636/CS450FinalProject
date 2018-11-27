@@ -9,7 +9,7 @@
     tools:context=".SaveLocation">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewRealName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/textViewRealName"
         android:ems="10"
         android:hint="Name your location for future reference"
         android:inputType="textPersonName" />
@@ -58,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/textViewRealName"
         android:ems="10"
         android:hint="Short description about your experience here"
         android:inputType="textPersonName"
