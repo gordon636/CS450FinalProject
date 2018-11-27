@@ -53,14 +53,27 @@ class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Location location = mDataSet.get(position).myLocation;
-        String username = mDataSet.get(position).username;
+        final Location location = mDataSet.get(position).myLocation;
+        final String username = mDataSet.get(position).username;
         String title = mDataSet.get(position).title;
         String date = mDataSet.get(position).date;
         String time = mDataSet.get(position).time;
 
-        holder.mTextView.setText("Title: "+title+"\nLocations: "+String.valueOf(location.getLatitude()+ ", "+location.getLongitude())+" \nDate: "+date+ " Time: "+time);
+        holder.mTextView.setText(title+"\n"+String.valueOf(location.getLatitude()+ ", "+location.getLongitude())+" \n"+date+ " Time: "+time);
 
+
+        //holder.mTextView = (TextView) itemView.findViewById(R.id.tvMessage);
+        holder.mTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(activity,SelectLocation.class);
+                intent.putExtra("location",location);
+                intent.putExtra("Username",username);
+
+                activity.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -73,19 +86,12 @@ class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.ViewHolder>
      */
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView mTextView;
+        Location currentLocation;
 
         ViewHolder(View v) {
             super(v);
-            mTextView = (TextView) itemView.findViewById(R.id.tvMessage);
-            mTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            mTextView = (TextView) v.findViewById(R.id.tvMessage);
 
-                    Intent intent = new Intent(activity,SelectLocation.class);
-
-                    activity.startActivity(intent);
-                }
-            });
         }
     }
 }
