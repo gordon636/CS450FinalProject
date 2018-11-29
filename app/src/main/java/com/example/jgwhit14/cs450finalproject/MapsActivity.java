@@ -165,11 +165,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     @Override
@@ -293,12 +288,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void myRefreshLocation (View view){
 
-        //save current location
-        Toast.makeText(getApplicationContext(),"Location Refreshed!",Toast.LENGTH_LONG).show();
-
         if(loaded) {
-
             mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(18),2000, null);
         }
     }
 
