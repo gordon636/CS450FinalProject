@@ -128,7 +128,19 @@ public class AddFriend extends AppCompatActivity {
                     //loggedInUser
                     if(usernameP.equals(loggedInUser)){ // Check if this user exists
 
-                        // User exists add to logged in user's friend list
+                        Iterable<DataSnapshot> friendRequests = user.child("friends").getChildren();
+                        for (DataSnapshot request:friendRequests){
+                            if (request.getValue().toString().split("mySPLIT")[0].equals(friend)){
+                                // Already added this person
+                                Toast.makeText(AddFriend.this, "Already added this user", Toast.LENGTH_SHORT).show();
+
+                                setResult(Activity.RESULT_OK);
+                                finish();
+                                return;
+                            }
+                        }
+
+                        // User exists and not already added, add to logged in user's friend list
                         User loginUser = user.getValue(User.class);
                         ArrayList<String> userFriends = loginUser.friends;
                         ArrayList<String> userFriendRequests = loginUser.friendRequests;
