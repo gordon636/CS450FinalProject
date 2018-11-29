@@ -137,7 +137,7 @@ public class AddFriend extends AppCompatActivity {
                         if (userFriends != null) {
                             AddFriend.child("users").child(loggedInUser).child("friends").child(String.valueOf(userFriends.size())).setValue(friend + "mySPLIT" +  formattedDate + "mySPLIT" + formattedTime+ "mySPLITfalse");
                             if (userFriendRequests != null){
-                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriends.size())).setValue(loggedInUser);
+                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriendRequests.size())).setValue(loggedInUser);
                             } else {
                                 AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(0)).setValue(loggedInUser);
                             }
@@ -147,7 +147,7 @@ public class AddFriend extends AppCompatActivity {
                         }else{
                             AddFriend.child("users").child(loggedInUser).child("friends").child(String.valueOf(0)).setValue(friend + "mySPLIT" +  formattedDate + "mySPLIT" + formattedTime+ "mySPLITfalse");
                             if (userFriendRequests != null){
-                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriends.size())).setValue(loggedInUser);
+                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriendRequests.size())).setValue(loggedInUser);
                             } else {
                                 AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(0)).setValue(loggedInUser);
                             }

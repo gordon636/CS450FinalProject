@@ -5,7 +5,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 @IgnoreExtraProperties
 public class User {
