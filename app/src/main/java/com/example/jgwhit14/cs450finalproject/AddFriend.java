@@ -128,6 +128,14 @@ public class AddFriend extends AppCompatActivity {
                     //loggedInUser
                     if(usernameP.equals(loggedInUser)){ // Check if this user exists
 
+                        if (friend.equals(loggedInUser)){
+                            Toast.makeText(AddFriend.this, "Can't friend yourself", Toast.LENGTH_SHORT).show();
+
+                            setResult(Activity.RESULT_OK);
+                            finish();
+                            return;
+                        }
+
                         Iterable<DataSnapshot> friendRequests = user.child("friends").getChildren();
                         for (DataSnapshot request:friendRequests){
                             if (request.getValue().toString().split("mySPLIT")[0].equals(friend)){
