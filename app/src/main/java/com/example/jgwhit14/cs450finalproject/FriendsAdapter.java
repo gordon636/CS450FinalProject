@@ -61,7 +61,6 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
         String approved = mDataSet.get(position).approved;
 
         holder.mTextViewUsername.setText(name);
-        System.out.println("This is the value: "+approved);
         if(approved.equals("true")){
             holder.mTextViewApproved.setText("Connected!");
             mLayout.setOnClickListener(new View.OnClickListener() {

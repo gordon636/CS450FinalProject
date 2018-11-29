@@ -84,11 +84,11 @@
         android:id="@+id/textViewLocation2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/textView5"
+        android:layout_alignParentStart="true"
         android:background="#8d000000"
         android:padding="10dp"
-        android:text="Friends Locations - Where have your friends been?"
+        android:text="Friends"
         android:textColor="@android:color/background_light" />
 
     <android.support.v7.widget.RecyclerView
