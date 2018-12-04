@@ -12,10 +12,18 @@ import android.location.Location;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -46,7 +54,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, Observer {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, Observer, NavigationView.OnNavigationItemSelectedListener{
 
     //GPS
     private ListView listView;
@@ -85,6 +93,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -92,6 +103,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         myList = new ArrayList<>();
         textViewLocation = findViewById(R.id.textViewLocation);
         pref = getApplicationContext().getSharedPreferences("Profile",0);
+
+
+
 
         TextView title = findViewById(R.id.textViewTitle);
         title.setText("Where You At - "+pref.getString("Username","none"));
@@ -112,6 +126,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         //buttons
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     //permission granted or not
@@ -395,6 +419,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return false;
     }
 }
 
