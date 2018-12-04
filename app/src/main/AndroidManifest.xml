@@ -35,17 +35,15 @@
             android:name=".SaveLocation"
             android:label="Save Location"
             android:theme="@style/Base.Theme.AppCompat.Dialog" />
-        <activity
+          <activity
             android:name=".SelectLocation"
             android:label="View Location"
             android:theme="@style/Base.Theme.AppCompat.Dialog" />
         <activity
             android:name=".AddFriend"
             android:label="Add Friend"
-            android:theme="@style/Base.Theme.AppCompat.Dialog" />
-        <activity android:name=".EditLocation"
-            android:label="Edit Location"
-            android:theme="@style/Base.Theme.AppCompat.Dialog" ></activity>
+            android:theme="@style/Base.Theme.AppCompat.Dialog"
+            />
     </application>
 
 </manifest>

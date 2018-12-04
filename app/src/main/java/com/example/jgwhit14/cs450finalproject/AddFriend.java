@@ -1,7 +1,6 @@
 package com.example.jgwhit14.cs450finalproject;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -42,8 +41,6 @@ public class AddFriend extends AppCompatActivity {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final DatabaseReference AddFriend = FirebaseDatabase.getInstance().getReference();
-
                 EditText FriendUsername = findViewById(R.id.editTextNickname);
                 friend = FriendUsername.getText().toString().trim();
 
@@ -128,7 +125,27 @@ public class AddFriend extends AppCompatActivity {
                     //loggedInUser
                     if(usernameP.equals(loggedInUser)){ // Check if this user exists
 
-                        // User exists add to logged in user's friend list
+                        if (friend.equals(loggedInUser)){
+                            Toast.makeText(AddFriend.this, "Can't friend yourself", Toast.LENGTH_SHORT).show();
+
+                            setResult(Activity.RESULT_OK);
+                            finish();
+                            return;
+                        }
+
+                        Iterable<DataSnapshot> friendRequests = user.child("friends").getChildren();
+                        for (DataSnapshot request:friendRequests){
+                            if (request.getValue().toString().split("mySPLIT")[0].equals(friend)){
+                                // Already added this person
+                                Toast.makeText(AddFriend.this, "Already added this user", Toast.LENGTH_SHORT).show();
+
+                                setResult(Activity.RESULT_OK);
+                                finish();
+                                return;
+                            }
+                        }
+
+                        // User exists and not already added, add to logged in user's friend list
                         User loginUser = user.getValue(User.class);
                         ArrayList<String> userFriends = loginUser.friends;
                         ArrayList<String> userFriendRequests = loginUser.friendRequests;

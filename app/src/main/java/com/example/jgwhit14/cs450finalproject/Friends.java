@@ -39,12 +39,18 @@ public class Friends extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewFriends);
         friendsList = new ArrayList<>();
 
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //mRecyclerView.setItemAnimator(new SlideInOutLeftItemAnimator(mRecyclerView));
+
         loadFriends ();
+
+
+
     }
 
     private void loadFriends() {
+
         friendsList.clear();
         database  = FirebaseDatabase.getInstance();
         pref = getApplicationContext().getSharedPreferences("Profile",0);
@@ -55,6 +61,7 @@ public class Friends extends AppCompatActivity {
         loginRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 Iterable<DataSnapshot> users = dataSnapshot.getChildren();
                 for (DataSnapshot user:users){
                     String usernameP = user.getKey();
@@ -64,16 +71,18 @@ public class Friends extends AppCompatActivity {
                         ArrayList<String> userFirends = loginUser.friends;
                         System.out.println("Friends: " + userFirends);
 
+
                         //check if i have friends added
                         if (userFirends != null){
+
                             //has friends, check friend to see if they added us back if so add to my friends
                             Toast.makeText(Friends.this, "I have friends", Toast.LENGTH_SHORT).show();
 
-                            for(String aFriend:userFirends){
-                                if(aFriend == null){
+                            for(String aFirend:userFirends){
+                                if(aFirend == null){
                                     continue;
                                 }
-                                String[] aLocationArr = aFriend.split("mySPLIT");
+                                String[] aLocationArr = aFirend.split("mySPLIT");
                                 FriendObject friend = new FriendObject(aLocationArr[0], aLocationArr[1], aLocationArr[3]);
 
                                 if (aLocationArr[3].equals("true")){

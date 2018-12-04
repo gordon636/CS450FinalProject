@@ -23,7 +23,7 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
     private String mId;
     private Friends activity;
     private String username;
-   private RelativeLayout mLayout;
+    private RelativeLayout mLayout;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
@@ -61,7 +61,6 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
         String approved = mDataSet.get(position).approved;
 
         holder.mTextViewUsername.setText(name);
-        System.out.println("This is the value: "+approved);
         if(approved.equals("true")){
             holder.mTextViewApproved.setText("Connected!");
             mLayout.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +70,7 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
                     username = holder.mTextViewUsername.getText().toString();
 
                     //view friends location
-                    Intent intent = new Intent(activity,MyFriendsLocations.class);
+                    Intent intent = new Intent(activity, MyFriendsLocations.class);
                     activity.startActivity(intent);
                     editor.putString("clicked_username", username).apply();
                 }
@@ -85,7 +84,7 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
                 public void onClick(View view) {
                     username = holder.mTextViewUsername.getText().toString();
 
-                    Toast.makeText(activity,"Sorry! "+username+" has not added you back!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity,"Sorry! "+username+" has not added you back!", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -102,7 +101,7 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
      * Inner Class for a recycler view
      */
     class ViewHolder extends RecyclerView.ViewHolder {
-        private  TextView mTextViewUsername,mTextViewApproved;
+        private  TextView mTextViewUsername, mTextViewApproved;
 
 
         ViewHolder(View v) {
@@ -112,9 +111,7 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
             mTextViewApproved = v.findViewById(R.id.mTextViewEmail);
             mTextViewUsername = v.findViewById(R.id.mTextViewUsername);
 
-            mLayout = (RelativeLayout) v.findViewById(R.id.itemLayout);
-           // Toast.makeText(activity,mTextViewApproved.getText().toString(),Toast.LENGTH_LONG).show();
-
+            mLayout = v.findViewById(R.id.itemLayout);
 
         }
     }
