@@ -1,13 +1,16 @@
 package com.example.jgwhit14.cs450finalproject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -37,6 +40,9 @@ public class SelectLocation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_location);
+
+        pref = getApplicationContext().getSharedPreferences("Profile",0);
+        editor = pref.edit();
 
         Save = findViewById(R.id.button3);
         Cancel = findViewById(R.id.button);
@@ -89,7 +95,7 @@ public class SelectLocation extends AppCompatActivity {
                         System.out.println("LOCATIONS: " + userLocations);
 
 
-
+                        int index = 0;
                         for(String aLocation:userLocations){
                             if(aLocation == null){
                                 continue;
@@ -105,22 +111,19 @@ public class SelectLocation extends AppCompatActivity {
                                 //this is the data for the selected location... set text fields
                                 nickname.setText("Nickname: "+aLocationArr[2]);
                                 note.setText("Notes: "+aLocationArr[4]);
+
+                                System.out.println("Index of this place is: "+index);
+                                editor.putString("selectedLocationIndex",String.valueOf(index)).apply();
                             }
 
-
+                            index ++;
                         }
 
 
                         break;
                     }
-
-
-
                 }
 
-                //update recycler view adapter
-             //   mAdapter = new LocationsAdapter(MyLocations.this, locationsList, "test");
-              //  mRecyclerView.setAdapter(mAdapter);
             }
 
             @Override
@@ -130,5 +133,28 @@ public class SelectLocation extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (resultCode == Activity.RESULT_OK){
+            downloadData();
+        }
+    }
+    public void edit (View view){
+
+        Intent intent = new Intent(this, EditLocation.class);
+        intent.putExtra("location",currentLocation);
+        intent.putExtra("nickname",nickname.getText().toString());
+        intent.putExtra("note",note.getText().toString());
+        intent.putExtra("Username",loggedInUser);
+        startActivityForResult(intent,1234);
+    }
+    public void cancel (View view){
+
+        finish();
     }
 }
