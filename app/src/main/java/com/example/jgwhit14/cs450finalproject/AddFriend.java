@@ -1,7 +1,6 @@
 package com.example.jgwhit14.cs450finalproject;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -42,8 +41,6 @@ public class AddFriend extends AppCompatActivity {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final DatabaseReference AddFriend = FirebaseDatabase.getInstance().getReference();
-
                 EditText FriendUsername = findViewById(R.id.editTextNickname);
                 friend = FriendUsername.getText().toString().trim();
 

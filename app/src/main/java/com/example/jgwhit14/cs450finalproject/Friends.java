@@ -3,7 +3,6 @@ package com.example.jgwhit14.cs450finalproject;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -29,24 +28,17 @@ public class Friends extends AppCompatActivity {
     private FirebaseDatabase database;
     private String loggedInUser;
     private SharedPreferences pref;
-    private SharedPreferences.Editor editor;
-    private String realLocation;
-    private String friend ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewFriends);
+        mRecyclerView = findViewById(R.id.recyclerViewFriends);
         friendsList = new ArrayList<>();
 
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //mRecyclerView.setItemAnimator(new SlideInOutLeftItemAnimator(mRecyclerView));
 
-        loadFriends ();
-
-
-
+        loadFriends();
     }
 
     private void loadFriends() {
@@ -78,11 +70,11 @@ public class Friends extends AppCompatActivity {
                             //has friends, check friend to see if they added us back if so add to my friends
                             Toast.makeText(Friends.this, "I have friends", Toast.LENGTH_SHORT).show();
 
-                            for(String aFirend:userFirends){
-                                if(aFirend == null){
+                            for(String aFriend:userFirends){
+                                if(aFriend == null){
                                     continue;
                                 }
-                                String[] aLocationArr = aFirend.split("mySPLIT");
+                                String[] aLocationArr = aFriend.split("mySPLIT");
                                 FriendObject friend = new FriendObject(aLocationArr[0], aLocationArr[1], aLocationArr[3]);
 
                                 if (aLocationArr[3].equals("true")){
@@ -97,8 +89,6 @@ public class Friends extends AppCompatActivity {
                         break;
                     }
 
-
-
                 }
 
                 //update recycler view adapter
@@ -111,9 +101,6 @@ public class Friends extends AppCompatActivity {
 
             }
         });
-
-
-
     }
 
     public void share (View view){
@@ -140,6 +127,14 @@ public class Friends extends AppCompatActivity {
         startActivityForResult(intent,1234);
 
     }
+
+    public void friendRequests (View view){
+
+        //Intent intent = new Intent(this, AcceptFriend.class);
+        //startActivityForResult(intent,1234);
+
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
