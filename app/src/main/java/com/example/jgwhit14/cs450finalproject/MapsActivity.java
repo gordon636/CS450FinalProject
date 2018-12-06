@@ -49,6 +49,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
@@ -88,7 +89,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String loggedInUser;
 
     private GoogleMap mMap;
-
+    private ArrayList friendsList;
     private  Marker MyLocationMarker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -468,6 +469,119 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void add (View view){
 
             add();
+    }
+
+    public HashMap<String,String> getFriends (){
+
+
+
+        //get friends from Firebase
+        friendsList.clear();
+        database  = FirebaseDatabase.getInstance();
+        pref = getApplicationContext().getSharedPreferences("Profile",0);
+        loggedInUser = pref.getString("Username","none");
+
+        //retrieve locations from Firebase and create MyLocationsObject objects
+        DatabaseReference loginRef = database.getReference("users");
+        loginRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Iterable<DataSnapshot> users = dataSnapshot.getChildren();
+                for (DataSnapshot user:users){
+                    String usernameP = user.getKey();
+                    //loggedInUser
+                    if(usernameP.equals(loggedInUser)){
+                        User loginUser = user.getValue(User.class);
+                        ArrayList<String> userFirends = loginUser.friends;
+                        System.out.println("Friends: " + userFirends);
+
+
+                        //check if i have friends added
+                        if (userFirends != null){
+
+                            //has friends, check friend to see if they added us back if so add to my friends
+                            Toast.makeText(MapsActivity.this, "I have friends", Toast.LENGTH_SHORT).show();
+
+                            for(String aFirend:userFirends){
+                                if(aFirend == null){
+                                    continue;
+                                }
+
+
+                                //if you are friends, it needs to load your friends location
+                                ArrayList<String> userLocations = loginUser.locations;
+                                System.out.println("LOCATIONS: " + userLocations);
+
+
+
+                                for(String aLocation:userLocations){
+                                    if(aLocation == null){
+                                        continue;
+                                    }
+                                    String[] aLocationArr = aLocation.split("mySPLIT");
+
+                                    Location location = new Location("");
+                                    location.setLatitude(Double.parseDouble(aLocationArr[0]));
+                                    location.setLongitude(Double.parseDouble(aLocationArr[1]));
+
+                                    MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
+
+                                    locationsList.add(0,locationToList);//add latest one to start of list
+                                }
+
+
+                                break;
+
+
+
+                                /*
+                                String[] aLocationArr = aFirend.split("mySPLIT");
+                                FriendObject friend = new FriendObject(aLocationArr[0], aLocationArr[1], aLocationArr[3]);
+
+                                if (aLocationArr[3].equals("true")){
+                                    friendsList.add(0,friend);//add latest one to start of list
+                                }else {
+                                    friendsList.add(friend);//add to end of list
+                                }
+                                */
+                            }
+
+                        }
+
+                        break;
+                    }
+
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return null;
+    }
+
+    public void recommended (Location myLocation, double radius){
+
+
+        HashMap friendsLocations = new HashMap<String,String>();
+
+        friendsLocations = getFriends();
+
+        System.out.println(friendsLocations.toString());
+
+    }
+
+    public void recommend (View view){
+
+        recommended(currentLocation,100);
     }
 }
 
