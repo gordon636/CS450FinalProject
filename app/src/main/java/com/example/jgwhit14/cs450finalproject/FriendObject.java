@@ -17,7 +17,7 @@ public class FriendObject {
     public FriendObject() {
     }
 
-    public FriendObject(String username, String dateAdded, String approved) {
+    public FriendObject(String username, String approved) {
         this.username = username;
         this.dateAdded = dateAdded;
         this.approved = approved;
