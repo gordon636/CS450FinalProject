@@ -9,17 +9,13 @@ import java.util.ArrayList;
  */
 public class FriendObject {
     public String username;
-    public String dateAdded;
     String approved ;
     ArrayList locations;
     public int id;
 
-    public FriendObject() {
-    }
 
     public FriendObject(String username, String approved) {
         this.username = username;
-        this.dateAdded = dateAdded;
         this.approved = approved;
 
     }

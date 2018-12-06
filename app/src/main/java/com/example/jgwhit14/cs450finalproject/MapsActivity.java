@@ -477,7 +477,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         //get friends from Firebase
-        friendsList.clear();
+      //  friendsList.clear();
         database  = FirebaseDatabase.getInstance();
         pref = getApplicationContext().getSharedPreferences("Profile",0);
         loggedInUser = pref.getString("Username","none");
@@ -510,27 +510,49 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 }
 
 
-                                //if you are friends, it needs to load your friends location
-                                ArrayList<String> userLocations = loginUser.locations;
-                                System.out.println("LOCATIONS: " + userLocations);
+                                String[] currentFriendData = aFirend.split("mySPLIT");
 
 
+                                for(DataSnapshot user1: users) {
+                                    String a = user1.getKey();
+                                    //if you are friends, it needs to load your friends location
+                                    System.out.println("ATTEMPTING 1: " + currentFriendData[0]+  " a "+a);
 
-                                for(String aLocation:userLocations){
-                                    if(aLocation == null){
-                                        continue;
+                                    if (a.equals(currentFriendData[0])) {
+
+                                        System.out.println("ATTEMPTING 2: " + currentFriendData[0]);
+
+                                        User currentUser = user.getValue(User.class);
+                                        ArrayList<String> userLocations = currentUser.locations;
+                                        System.out.println("LOCATIONS: " + currentUser);
+
+
+                                        for (String aLocation : userLocations) {
+                                            if (aLocation == null) {
+                                                continue;
+                                            }
+                                            String[] aLocationArr = aLocation.split("mySPLIT");
+
+                                            Location location = new Location("");
+                                            location.setLatitude(Double.parseDouble(aLocationArr[0]));
+                                            location.setLongitude(Double.parseDouble(aLocationArr[1]));
+
+                                            MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
+
+                                            locationsList.add(0, locationToList);//add latest one to start of list
+                                        }
+
+
                                     }
-                                    String[] aLocationArr = aLocation.split("mySPLIT");
 
-                                    Location location = new Location("");
-                                    location.setLatitude(Double.parseDouble(aLocationArr[0]));
-                                    location.setLongitude(Double.parseDouble(aLocationArr[1]));
 
-                                    MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
-
-                                    locationsList.add(0,locationToList);//add latest one to start of list
                                 }
 
+                                recommended(currentLocation,100);
+
+                               // friendsLocations = getFriends();
+
+                                System.out.println("OUR LOCATIONS: "+locationsList);
 
                                 break;
 
@@ -572,17 +594,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void recommended (Location myLocation, double radius){
 
 
-        HashMap friendsLocations = new HashMap<String,String>();
 
-        friendsLocations = getFriends();
-
-        System.out.println(friendsLocations.toString());
 
     }
 
     public void recommend (View view){
 
-        recommended(currentLocation,100);
+        getFriends();
     }
 }
 
