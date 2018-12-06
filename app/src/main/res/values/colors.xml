@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#b5703f</color>
+    <color name="colorPrimaryDark">#682506</color>
     <color name="colorAccent">#FF4081</color>
     <color name="error">#FF0000</color>
 
@@ -14,7 +14,7 @@
     <color name="fab_color_2">#9c27b0</color>
     <color name="fab_color_2_muted">#a56ab0</color>
 
-    <color name="button_color_text">#9E9E9E</color>
+    <color name="button_color_text">#9e9e9e</color>
     <color name="color_text_info">#d5d1ac</color>
 
     <color name="action_bar_01">#2196F3</color>

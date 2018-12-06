@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                             System.out.println("Sign-up Successful");
                             // If code reaches here, username not taken
                             loggedInUsername = username;
-                            editor.putString("Username", loggedInUsername).apply();
+
                             map();
                         }
                     }
@@ -216,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
                                 loggedInUsername = username;
                                 editor.putString("Username", loggedInUsername).apply();
                                 signUpFail = false;
+                                loginUsername.setText("");
+                                loginPW.setText("");
                             }
                         }
 

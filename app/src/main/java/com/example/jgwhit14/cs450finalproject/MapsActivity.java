@@ -18,6 +18,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -103,12 +104,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         myList = new ArrayList<>();
         textViewLocation = findViewById(R.id.textViewLocation);
         pref = getApplicationContext().getSharedPreferences("Profile",0);
-
-
+        editor = pref.edit();
 
 
         TextView title = findViewById(R.id.textViewTitle);
-        title.setText("Where You At - "+pref.getString("Username","none"));
+        title.setText("Where You At! - "+pref.getString("Username","none"));
         //initiate the handler
         if (handler == null) {
             this.handler = new LocationHandler(this);
@@ -261,19 +261,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void locations (View view){
 
+        locations();
+    }
+    public void locations (){
+
         Intent intent = new Intent(this, MyLocations.class);
         startActivity(intent);
     }
 
-    public void friends (View view){
+    public void friends (){
 
         Intent intent = new Intent(this, Friends.class);
         startActivity(intent);
     }
+    public void friends (View view){
 
+       friends();
+    }
 
     public void save (View view){
+        save();
+    }
 
+    public void save(){
         Toast.makeText(getApplicationContext(),"Waiting for gps, please wait!",Toast.LENGTH_LONG).show();
 
         if(loaded) {
@@ -295,11 +305,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             //startActivity(intent);
             startActivityForResult(intent,1234);
         }
-
-
-
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -423,7 +429,45 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        return false;
+        int id = menuItem.getItemId();
+
+        if (id == R.id.nav_locations) {
+            locations();
+        } else if (id == R.id.nav_friends) {
+            friends();
+        } else if (id == R.id.nav_requests) {
+
+        } else if (id == R.id.nav_add) {
+            add();
+        }
+        else if (id == R.id.nav_save) {
+            save();
+        }else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_settings) {
+
+        }else if (id == R.id.nav_logout) {
+
+                finish();
+                //
+                editor.putString("Username", "").apply();
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void add() {
+
+        Intent intent = new Intent(this,AddFriend.class);
+        startActivity(intent);
+    }
+
+    private void add (View view){
+
+            add();
     }
 }
 
