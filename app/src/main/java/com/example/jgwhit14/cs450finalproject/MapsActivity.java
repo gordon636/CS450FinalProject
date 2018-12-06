@@ -106,7 +106,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         pref = getApplicationContext().getSharedPreferences("Profile",0);
         editor = pref.edit();
 
-
+//
         TextView title = findViewById(R.id.textViewTitle);
         title.setText("Where You At! - "+pref.getString("Username","none"));
         //initiate the handler
