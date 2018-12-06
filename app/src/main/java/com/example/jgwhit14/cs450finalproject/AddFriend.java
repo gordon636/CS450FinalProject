@@ -26,8 +26,6 @@ public class AddFriend extends AppCompatActivity {
     private FirebaseDatabase database;
     private String loggedInUser;
     private SharedPreferences pref;
-    private SharedPreferences.Editor editor;
-    private String realLocation;
     private String friend;
 
     @Override
@@ -68,17 +66,14 @@ public class AddFriend extends AppCompatActivity {
                             }
 
                         }
-
-
                         if (found){
                             Toast.makeText(getApplicationContext(),"Friend Added!",Toast.LENGTH_LONG).show();
-
-
                         }else {
                             Toast.makeText(getApplicationContext(),"User does not exist",Toast.LENGTH_LONG).show();
+                        }
+                    }
 
-                        }  ;
-                    }  @Override
+                    @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
@@ -103,14 +98,6 @@ public class AddFriend extends AppCompatActivity {
         database  = FirebaseDatabase.getInstance();
         pref = getApplicationContext().getSharedPreferences("Profile",0);
         loggedInUser = pref.getString("Username","none");
-        //Repeater
-        Calendar c = Calendar.getInstance();
-        System.out.println("Current time =&gt; " + c.getTime());
-
-        SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy");
-        final String formattedDate = df.format(c.getTime());
-        SimpleDateFormat time = new SimpleDateFormat("hh:mm c");
-        final String formattedTime = time.format(c.getTime());
 
 
         //retrieve locations from Firebase and create MyLocationsObject objects
@@ -152,7 +139,7 @@ public class AddFriend extends AppCompatActivity {
                         System.out.println("Friends: " + userFriends);
 
                         if (userFriends != null) {
-                            AddFriend.child("users").child(loggedInUser).child("friends").child(String.valueOf(userFriends.size())).setValue(friend + "mySPLIT" +  formattedDate + "mySPLIT" + formattedTime+ "mySPLITfalse");
+                            AddFriend.child("users").child(loggedInUser).child("friends").child(String.valueOf(userFriends.size())).setValue(friend + "mySPLITfalse");
                             if (userFriendRequests != null){
                                 AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriendRequests.size())).setValue(loggedInUser);
                             } else {
@@ -162,7 +149,7 @@ public class AddFriend extends AppCompatActivity {
                             finish();
 
                         }else{
-                            AddFriend.child("users").child(loggedInUser).child("friends").child(String.valueOf(0)).setValue(friend + "mySPLIT" +  formattedDate + "mySPLIT" + formattedTime+ "mySPLITfalse");
+                            AddFriend.child("users").child(loggedInUser).child("friends").child(String.valueOf(0)).setValue(friend + "mySPLITfalse");
                             if (userFriendRequests != null){
                                 AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriendRequests.size())).setValue(loggedInUser);
                             } else {
@@ -176,10 +163,9 @@ public class AddFriend extends AppCompatActivity {
                     }
 
                 }
+            }
 
-
-                ;
-            }  @Override
+            @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
