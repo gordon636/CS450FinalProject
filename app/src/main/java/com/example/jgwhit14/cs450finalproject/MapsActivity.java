@@ -488,13 +488,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                ArrayList<String> userLocations = new ArrayList<>();
+                locationsList = new ArrayList<>();
                 Iterable<DataSnapshot> users = dataSnapshot.getChildren();
                 for (DataSnapshot user:users){
                     String usernameP = user.getKey();
                     //loggedInUser
-                    if(usernameP.equals(loggedInUser)){
-                        User loginUser = user.getValue(User.class);
+                    User loginUser = user.getValue(User.class);
+
+
+
+
+                     if (loginUser.locations !=null) {
+                         for (int i = 0; i < loginUser.locations.size(); i++) {
+
+
+                             userLocations.add(usernameP+"myFriendSPLIT"+loginUser.locations.get(i));
+                             System.out.println(usernameP+"myFriendSPLIT"+loginUser.locations.get(i));
+                         }
+                     }
+
+                     if(usernameP.equals(loggedInUser)){
+
                         ArrayList<String> userFirends = loginUser.friends;
+
                         System.out.println("Friends: " + userFirends);
 
 
@@ -509,71 +526,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     continue;
                                 }
 
+                                System.out.println("currentFriend: "+aFirend);
 
                                 String[] currentFriendData = aFirend.split("mySPLIT");
 
+                                //go through userLocations list and filter out friends
+                                for (String aLocation: userLocations) { //go through all the locations
 
-                                for(DataSnapshot user1: users) {
-                                    String a = user1.getKey();
-                                    //if you are friends, it needs to load your friends location
-                                    System.out.println("ATTEMPTING 1: " + currentFriendData[0]+  " a "+a);
+                                    String[] getUser = aLocation.split("myFriendSPLIT");
+                                    String username = getUser[0];
 
-                                    if (a.equals(currentFriendData[0])) {
-
-                                        System.out.println("ATTEMPTING 2: " + currentFriendData[0]);
-
-                                        User currentUser = user.getValue(User.class);
-                                        ArrayList<String> userLocations = currentUser.locations;
-                                        System.out.println("LOCATIONS: " + currentUser);
+                                    if (!username.equals(loggedInUser)) { //dont check logged in users locations
+                                        System.out.println("current username: " + username + " to match with: "+currentFriendData[0]);
 
 
-                                        for (String aLocation : userLocations) {
-                                            if (aLocation == null) {
-                                                continue;
-                                            }
-                                            String[] aLocationArr = aLocation.split("mySPLIT");
-
-                                            Location location = new Location("");
-                                            location.setLatitude(Double.parseDouble(aLocationArr[0]));
-                                            location.setLongitude(Double.parseDouble(aLocationArr[1]));
-
-                                            MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
-
-                                            locationsList.add(0, locationToList);//add latest one to start of list
+                                        if (username.equals(currentFriendData[0])) {
+                                            System.out.println("friend username: " + currentFriendData[0]);
+                                            locationsList.add(aLocation);
                                         }
 
-
                                     }
-
-
                                 }
 
-                                recommended(currentLocation,100);
 
-                               // friendsLocations = getFriends();
-
-                                System.out.println("OUR LOCATIONS: "+locationsList);
-
-                                break;
-
-
-
-                                /*
-                                String[] aLocationArr = aFirend.split("mySPLIT");
-                                FriendObject friend = new FriendObject(aLocationArr[0], aLocationArr[1], aLocationArr[3]);
-
-                                if (aLocationArr[3].equals("true")){
-                                    friendsList.add(0,friend);//add latest one to start of list
-                                }else {
-                                    friendsList.add(friend);//add to end of list
-                                }
-                                */
                             }
 
                         }
 
-                        break;
+
                     }
+                    recommended(currentLocation,100);
+
+                    System.out.println("OUR LOCATIONS: "+locationsList);
 
 
 
@@ -594,6 +578,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void recommended (Location myLocation, double radius){
 
 
+        //looop through friends locations, check the distance from your current location, if it is within th specified radius, recoomned to the user
+
+        for (Object friendLocation: locationsList){
+
+            System.out.println("Check: "+friendLocation);
+
+            String[] userData =   friendLocation.toString().split("myFriendSPLIT");
+
+            String []coordinates = userData[1].split("mySPLIT");
+
+            System.out.println("Lat: "+coordinates[0]+" Lon: "+coordinates[1]);
+
+
+            //now compare lat lon to current location
+            Location myFriendLocation= new Location("");
+            myFriendLocation.setLongitude(Double.valueOf(coordinates[1]));
+            myFriendLocation.getLatitude(Double.valueOf(coordinates[0]));
+
+        }
 
 
     }
