@@ -55,6 +55,8 @@ import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, Observer, NavigationView.OnNavigationItemSelectedListener{
 
@@ -91,6 +93,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private ArrayList friendsList;
     private  Marker MyLocationMarker;
+    private  ArrayList recommendedLocations;
+    //counter
+    private Timer t = null;
+    private Counter ctr = null;
+    int lastMinute;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -251,6 +258,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                         loadPointers();
+
                     }
                     loaded=true;
 
@@ -327,6 +335,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void loadPointers (){
 
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+        //    mMap.animateCamera(CameraUpdateFactory.zoomTo(18),2000, null);
+
+        ctr = new Counter();
+        ctr.count = 0;
+        t = new Timer();
+
+        t.scheduleAtFixedRate(ctr, 0, 100); //tenth of sec
 
         database  = FirebaseDatabase.getInstance();
         pref = getApplicationContext().getSharedPreferences("Profile",0);
@@ -448,7 +464,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else if (id == R.id.nav_settings) {
             
 
-        }else if (id == R.id.nav_logout) {
+        }else if (id == R.id.nav_recommend) {
+
+            if (recommendedLocations.size() == 0){
+                Toast.makeText(getApplicationContext(), "No Recommendations Available!", Toast.LENGTH_LONG).show();
+
+            }else {
+                Intent intent = new Intent(this, ViewRecommendations.class);
+                intent.putExtra("Locations",recommendedLocations);
+                startActivity(intent);
+            }
+        }
+            else
+         if (id == R.id.nav_logout) {
 
                 finish();
                 //
@@ -519,7 +547,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if (userFirends != null){
 
                             //has friends, check friend to see if they added us back if so add to my friends
-                            Toast.makeText(MapsActivity.this, "I have friends", Toast.LENGTH_SHORT).show();
 
                             for(String aFirend:userFirends){
                                 if(aFirend == null){
@@ -555,9 +582,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                     }
-                    recommended(currentLocation,100);
+                    recommended(currentLocation,1); //radius needs to be calculated settings
 
-                    System.out.println("OUR LOCATIONS: "+locationsList);
+                    //System.out.println("OUR LOCATIONS: "+locationsList);
 
 
 
@@ -577,7 +604,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void recommended (Location myLocation, double radius){
 
-
+        System.out.println("MY LOCATION: "+myLocation.getLatitude()+" lon: "+myLocation.getLongitude());
+         recommendedLocations = new ArrayList<>();
         //looop through friends locations, check the distance from your current location, if it is within th specified radius, recoomned to the user
 
         for (Object friendLocation: locationsList){
@@ -594,16 +622,77 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             //now compare lat lon to current location
             Location myFriendLocation= new Location("");
             myFriendLocation.setLongitude(Double.valueOf(coordinates[1]));
-            myFriendLocation.getLatitude(Double.valueOf(coordinates[0]));
+            myFriendLocation.setLatitude(Double.valueOf(coordinates[0]));
+
+            if (myLocation.distanceTo(myFriendLocation)/1000 < radius){ //use km radius and distance
+
+                recommendedLocations.add(friendLocation);
+            }
+
 
         }
 
-
+        if (recommendedLocations.size() > 0) {
+            int size = recommendedLocations.size();
+            Toast.makeText(getApplicationContext(), "You have " + size + " recommended location(s)", Toast.LENGTH_LONG).show();
+            TextView recommend = findViewById(R.id.textViewRecomend);
+            recommend.setText(String.valueOf(size)+" *");
+        }
     }
 
     public void recommend (View view){
 
         getFriends();
+    }
+
+
+
+    class Counter extends TimerTask {
+        SharedPreferences pref = getPreferences(MODE_PRIVATE);
+
+
+        private int count =   0;
+        private  int interval = 5;
+        @Override
+        public void run() {
+
+
+            MapsActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //calculate min secs and split sec from 10th of sec
+                    int min = count /600;
+
+                    System.out.println("min - lastMinute: "+(min - lastMinute));
+                    if ((min - lastMinute) ==interval && lastMinute != min || count ==0){ //must recommend locations every 5mins or when the timer starts
+
+                        System.out.println("counting - " + lastMinute);
+                        getFriends();
+                        lastMinute = min;
+                    }
+
+                    count++;
+                }
+            });
+        }
+    }
+
+    public void recommended (View view){
+
+        recommended();
+    }
+
+    private void recommended() {
+
+        if (recommendedLocations.size() == 0){
+            Toast.makeText(getApplicationContext(), "No Recommendations Available!", Toast.LENGTH_LONG).show();
+
+        }else {
+            Intent intent = new Intent(this, ViewRecommendations.class);
+            intent.putExtra("Locations",recommendedLocations);
+            startActivity(intent);
+        }
+
     }
 }
 
