@@ -471,6 +471,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else if (id == R.id.nav_friends) {
             friends();
         } else if (id == R.id.nav_requests) {
+            Intent intent = new Intent(this, FriendRequests.class);
+           startActivity(intent);
 
         } else if (id == R.id.nav_add) {
             add();
@@ -606,7 +608,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                     }
-                    recommended(currentLocation,1); //radius needs to be calculated settings
+                    recommended(currentLocation,pref.getInt("locationRadius",30)); //radius needs to be calculated settings
 
                     //System.out.println("OUR LOCATIONS: "+locationsList);
 

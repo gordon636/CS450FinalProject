@@ -108,12 +108,12 @@ public class SelectLocation extends AppCompatActivity {
 
                             if (currentLocation.getLatitude() == location.getLatitude() & currentLocation.getLongitude() == location.getLongitude()){
 
-                                //this is the data for the selected location... set text fields
+                                // This is the data for the selected location... set text fields
                                 nickname.setText("Nickname: "+aLocationArr[2]);
                                 note.setText("Notes: "+aLocationArr[4]);
 
                                 System.out.println("Index of this place is: "+index);
-                                editor.putString("selectedLocationIndex",String.valueOf(index)).apply();
+                                editor.putString("selectedLocationIndex", String.valueOf(index)).apply();
                             }
 
                             index ++;

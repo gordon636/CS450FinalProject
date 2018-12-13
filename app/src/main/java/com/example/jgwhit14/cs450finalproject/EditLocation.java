@@ -134,8 +134,6 @@ public class EditLocation extends AppCompatActivity {
 
 
                             }
-
-                            ;
                         }
 
                         @Override
