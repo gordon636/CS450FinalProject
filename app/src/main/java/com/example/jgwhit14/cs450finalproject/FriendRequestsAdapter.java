@@ -68,7 +68,7 @@ class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.V
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         String name = mDataSet.get(position).username;
 
         holder.mTextViewUsername.setText(name);
@@ -98,13 +98,37 @@ class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.V
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
                         DataSnapshot user = dataSnapshot.child(loggedInUser);
                         Iterable<DataSnapshot> friendRequests = user.child("friendRequests").getChildren();
+
+                        DataSnapshot user2 = dataSnapshot.child(username);
+                        Iterable<DataSnapshot> friends = user.child("friends").getChildren();
+
+
                         for(DataSnapshot request:friendRequests){
-                            System.out.println("REQUEST " + request);
-                            Object requestUsername = request.getValue();
+
+                            User loginUser = user.getValue(User.class);
+                            ArrayList<String> userFriends = loginUser.friends;
+
+                            String request2 = request.getValue().toString();
+                            String requestUsername = request2.split("mySPLIT")[0];
                             if(requestUsername.equals(username)){
-                                request.getRef().removeValue();
+                               ref.child("users").child(loggedInUser).child("friendRequests").child(Integer.toString(position)).setValue(requestUsername + "mySPLITfalse");
+                               ref.child("users").child(loggedInUser).child("friends").child(String.valueOf(userFriends.size())).setValue(username + "mySPLITtrue");
+
+                               // Go through each friend
+                                int index = 0;
+                               for(DataSnapshot friend:friends){
+                                   String friendUsername = friend.toString().split("mySPLIT")[0];
+                                   if (friendUsername.equals(loggedInUser)){
+                                       ref.child("users").child(username).child("friends").child(String.valueOf(index)).setValue(loggedInUser + "mySPLITtrue");
+                                   }
+                                   index++;
+                               }
+
+
                             }
                         }
 

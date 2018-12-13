@@ -141,9 +141,9 @@ public class AddFriend extends AppCompatActivity {
                         if (userFriends != null) {
                             AddFriend.child("users").child(loggedInUser).child("friends").child(String.valueOf(userFriends.size())).setValue(friend + "mySPLITfalse");
                             if (userFriendRequests != null){
-                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriendRequests.size())).setValue(loggedInUser);
+                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriendRequests.size())).setValue(loggedInUser + "mySPLITtrue");
                             } else {
-                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(0)).setValue(loggedInUser);
+                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(0)).setValue(loggedInUser + "mySPLITtrue");
                             }
                             setResult(Activity.RESULT_OK);
                             finish();
@@ -151,9 +151,9 @@ public class AddFriend extends AppCompatActivity {
                         }else{
                             AddFriend.child("users").child(loggedInUser).child("friends").child(String.valueOf(0)).setValue(friend + "mySPLITfalse");
                             if (userFriendRequests != null){
-                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriendRequests.size())).setValue(loggedInUser);
+                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(userFriendRequests.size())).setValue(loggedInUser + "mySPLITtrue");
                             } else {
-                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(0)).setValue(loggedInUser);
+                                AddFriend.child("users").child(friend).child("friendRequests").child(String.valueOf(0)).setValue(loggedInUser + "mySPLITtrue");
                             }
                             setResult(Activity.RESULT_OK);
                             finish();
