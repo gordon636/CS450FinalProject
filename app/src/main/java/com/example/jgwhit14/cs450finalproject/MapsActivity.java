@@ -471,6 +471,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else if (id == R.id.nav_friends) {
             friends();
         } else if (id == R.id.nav_requests) {
+            Intent intent = new Intent(this, FriendRequests.class);
+           startActivity(intent);
 
         } else if (id == R.id.nav_add) {
             add();

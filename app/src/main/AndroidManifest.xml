@@ -36,21 +36,23 @@
         <activity
             android:name=".SaveLocation"
             android:label="Save Location"
-            android:theme="@style/Base.Theme.AppCompat.Dialog" />
+            android:theme="@style/Base.Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".SelectLocation"
             android:label="View Location"
-            android:theme="@style/Base.Theme.AppCompat.Dialog" />
+            android:theme="@style/Base.Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".AddFriend"
             android:label="Add Friend"
-            android:theme="@style/Base.Theme.AppCompat.Dialog" />
+            android:theme="@style/Base.Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".NavigationDrawer"
             android:label="@string/title_activity_navigation_drawer"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".ViewRecommendations"></activity>
-        <activity android:name=".Settings"></activity>
+        <activity android:name=".Settings"
+            android:label="Settings"
+            android:theme="@style/Base.Theme.AppCompat.Light.Dialog"></activity>
     </application>
 
 </manifest>
