@@ -60,28 +60,25 @@ public class FriendRequests extends AppCompatActivity {
                     //loggedInUser
                     if(usernameP.equals(loggedInUser)){
                         User loginUser = user.getValue(User.class);
-                        ArrayList<String> userFirends = loginUser.friends;
-                        System.out.println("Friends: " + userFirends);
+                        ArrayList<String> userFriendRequests = loginUser.friendRequests;
+                        System.out.println("Friend Requests: " + userFriendRequests);
 
 
                         //check if i have friends added
-                        if (userFirends != null){
+                        if (userFriendRequests != null){
 
                             //has friends, check friend to see if they added us back if so add to my friends
                             Toast.makeText(FriendRequests.this, "I have friends", Toast.LENGTH_SHORT).show();
 
-                            for(String aFriend:userFirends){
+                            for(String aFriend:userFriendRequests){
                                 if(aFriend == null){
                                     continue;
                                 }
                                 String[] aLocationArr = aFriend.split("mySPLIT");
-                                FriendObject friend = new FriendObject(aLocationArr[0], aLocationArr[1]);
+                                FriendRequestObject friend = new FriendRequestObject(aLocationArr[0]);
 
-                                if (aLocationArr[1].equals("true")){
-                                    friendsList.add(0,friend);//add latest one to start of list
-                                }else {
-                                    friendsList.add(friend);//add to end of list
-                                }
+                                friendsList.add(0,friend);//add latest one to start of list
+
                             }
 
                         }

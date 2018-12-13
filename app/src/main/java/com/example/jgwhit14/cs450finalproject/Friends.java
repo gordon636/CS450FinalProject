@@ -30,8 +30,7 @@ public class Friends extends AppCompatActivity {
     private String loggedInUser;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private String realLocation;
-    private String friend ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +42,7 @@ public class Friends extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //mRecyclerView.setItemAnimator(new SlideInOutLeftItemAnimator(mRecyclerView));
 
-        loadFriends ();
+        loadFriends();
 
 
 
@@ -93,12 +92,8 @@ public class Friends extends AppCompatActivity {
                             }
 
                         }
-
                         break;
                     }
-
-
-
                 }
 
                 //update recycler view adapter
@@ -139,6 +134,11 @@ public class Friends extends AppCompatActivity {
         Intent intent = new Intent(this, AddFriend.class);
         startActivityForResult(intent,1234);
 
+    }
+
+    public void friendRequests(View view){
+        Intent intent = new Intent(this, FriendRequests.class);
+        startActivity(intent);
     }
 
     @Override

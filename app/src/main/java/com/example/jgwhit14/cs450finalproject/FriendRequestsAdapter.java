@@ -2,14 +2,20 @@ package com.example.jgwhit14.cs450finalproject;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +23,18 @@ import java.util.List;
 class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.ViewHolder> {
     private static final int CHAT_END = 1;
     private static final int CHAT_START = 2;
+    private Button Accept;
+    private Button Reject;
 
-    private List<FriendObject> mDataSet;
+    private FirebaseDatabase database;
+    private String loggedInUser;
+    private SharedPreferences pref;
+
+    private List<FriendRequestObject> mDataSet;
     private String mId;
     private FriendRequests activity;
     private String username;
     private RelativeLayout mLayout;
-    private SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
     /**
@@ -32,16 +43,18 @@ class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.V
      * @param id      Device id
      * @param
      */
-    FriendRequestsAdapter(ArrayList<FriendObject> dataSet, String id, FriendRequests activity) {
+    FriendRequestsAdapter(ArrayList<FriendRequestObject> dataSet, String id, FriendRequests activity) {
         mDataSet = dataSet;
         mId = id;
         this.activity = activity;
+
     }
 
     @Override
     public FriendRequestsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View v;
-        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat_start, parent, false);
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat_start_requests, parent, false);
         return new ViewHolder(v);
     }
 
@@ -60,7 +73,7 @@ class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.V
 
         holder.mTextViewUsername.setText(name);
 
-        holder.mTextViewApproved.setText("Connected!");
+
         mLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +85,41 @@ class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.V
                 activity.startActivity(intent);
             }
         });
+
+        Accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                username = holder.mTextViewUsername.getText().toString();
+                database  = FirebaseDatabase.getInstance();
+                loggedInUser = pref.getString("Username","none");
+
+                final DatabaseReference ref = database.getReference("users");
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        DataSnapshot user = dataSnapshot.child(loggedInUser);
+                        Iterable<DataSnapshot> friendRequests = user.child("friendRequests").getChildren();
+                        for(DataSnapshot request:friendRequests){
+                            System.out.println("REQUEST " + request);
+                            Object requestUsername = request.getValue();
+                            if(requestUsername.equals(username)){
+                                request.getRef().removeValue();
+                            }
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
+
 
 
     }
@@ -85,7 +133,8 @@ class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.V
      * Inner Class for a recycler view
      */
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView mTextViewUsername, mTextViewApproved;
+        private TextView mTextViewUsername;
+
 
 
         ViewHolder(View v) {
@@ -95,8 +144,10 @@ class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.V
             mTextViewUsername = v.findViewById(R.id.mTextViewUsername);
 
             mLayout = v.findViewById(R.id.itemLayout);
-
+            Accept = v.findViewById(R.id.acceptRequest);
+            Reject = v.findViewById(R.id.rejectRequest);
         }
     }
+
 }
 

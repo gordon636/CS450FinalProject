@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:background="@color/blue"
+    android:padding="5dp">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="3dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="1dp">
+
+        <TextView
+            android:id="@+id/mTextViewUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:padding="@dimen/list_item_padding"
+            android:text="@string/text_item"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="-15dp"
+        android:layout_toEndOf="@+id/card_view1"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="1dp">
+
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/acceptRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="129dp"
+        android:text="Accept" />
+
+    <Button
+        android:id="@+id/rejectRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/card_view"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="31dp"
+        android:text="Reject" />
+</RelativeLayout>
