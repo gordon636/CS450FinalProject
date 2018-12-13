@@ -68,6 +68,23 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textViewRecomend"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/color_text_info"
+        android:gravity="center"
+        android:onClick="recommended"
+        android:shadowColor="@color/common_google_signin_btn_text_dark_focused"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:text="0"
+        android:textColor="@color/defaultColor"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="right|center" />
 
 
 </android.support.design.widget.CoordinatorLayout>
