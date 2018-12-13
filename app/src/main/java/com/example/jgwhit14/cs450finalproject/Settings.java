@@ -33,8 +33,8 @@ public class Settings extends AppCompatActivity {
         radiusBar = findViewById(R.id.seekBarRadius);
         radiusTextView =findViewById(R.id.textViewRadiusValue);
 
-        radiusBar.setProgress(pref.getInt("locationRadius",30));
-        radiusTextView.setText(pref.getInt("locationRadius",30) + " km");
+        radiusBar.setProgress(currentRadius);
+        radiusTextView.setText(currentRadius + " km");
         radiusBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
