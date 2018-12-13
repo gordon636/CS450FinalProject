@@ -139,6 +139,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        onMapReady(mMap);
+    }
+
     //permission granted or not
     @Override
     public void onRequestPermissionsResult(
@@ -166,20 +172,36 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        int style = pref.getInt("MAP_STYLE", 1);
         try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
-            boolean success = googleMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                            this, R.raw.style_json));
+            boolean success = false;
+            if(style == 1){
+                success = googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                this, R.raw.style_json));
+            }
+
+            else if(style == 2){
+                success = googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                this, R.raw.style2_json));
+            }
+
+            else if(style == 3){
+                success = googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                this, R.raw.style3_json));
+            }
+
 
             if (!success) {
                 Log.e(LOGTAG, "Style parsing failed.");
@@ -190,6 +212,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         mMap = googleMap;
+        System.out.println("VALUE OF STYLE: " + pref.getInt("MAP_STYLE", 1));
     }
 
     @Override
@@ -447,7 +470,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         } else if (id == R.id.nav_settings) {
 
-
+            setting();
         }else if (id == R.id.nav_logout) {
 
                 finish();
@@ -460,6 +483,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void setting(){
+        Intent intent = new Intent(this, Settings.class);
+        startActivity(intent);
+    }
+
 
     private void add() {
 
