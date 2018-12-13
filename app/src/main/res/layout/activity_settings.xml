@@ -9,7 +9,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="20dp"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="Map Style" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,8 +35,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Style1"
-                />
+                android:layout_marginLeft="10dp"
+                android:text="Style1" />
 
         </LinearLayout>
 
@@ -45,8 +54,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Style2"
-                />
+                android:layout_marginLeft="10dp"
+                android:text="Style2" />
 
         </LinearLayout>
 
@@ -64,10 +73,31 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Style3"
-                />
+                android:layout_marginLeft="10dp"
+                android:text="Style3" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Recommended Locations Radius" />
+
+        <SeekBar
+            android:id="@+id/seekBarRadius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="190"
+
+            android:progress="30" />
+
+        <TextView
+            android:id="@+id/textViewRadiusValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
     </LinearLayout>
 
