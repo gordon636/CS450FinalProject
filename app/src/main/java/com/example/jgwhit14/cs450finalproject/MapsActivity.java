@@ -387,7 +387,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-
+                        float c = randomColor();
 
                         for(String aLocation:userLocations) {
                             if (aLocation == null) {
@@ -406,7 +406,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                            locationsList.add(locationToList);
 
                             myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                            final Marker marker = mMap.addMarker(new MarkerOptions().position(myLocation).title(aLocationArr[2]).icon(BitmapDescriptorFactory.defaultMarker(randomColor())));
+                            final Marker marker = mMap.addMarker(new MarkerOptions().position(myLocation).title(aLocationArr[2]).icon(BitmapDescriptorFactory.defaultMarker(c)));
 
                             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                 @Override

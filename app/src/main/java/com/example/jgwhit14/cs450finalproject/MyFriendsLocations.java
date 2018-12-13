@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +17,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -30,6 +33,7 @@ public class MyFriendsLocations extends AppCompatActivity {
     private TextView userInfo;
     private FirebaseDatabase database;
     private String loggedInUser;
+    private TextView view_ALL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,14 @@ public class MyFriendsLocations extends AppCompatActivity {
         database  = FirebaseDatabase.getInstance();
         pref = getApplicationContext().getSharedPreferences("Profile",0);
         loggedInUser = pref.getString("Username","none");
+
+        view_ALL = findViewById(R.id.textView6);
+        view_ALL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show();
+            }
+        });
 
         //retrieve locations from Firebase and create MyLocationsObject objects
         DatabaseReference loginRef = database.getReference("users");
@@ -126,4 +138,9 @@ public class MyFriendsLocations extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+    public void show(){
+
+    }
+
 }
