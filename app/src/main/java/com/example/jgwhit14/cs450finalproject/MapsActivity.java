@@ -146,6 +146,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        onMapReady(mMap);
+    }
+
     //permission granted or not
     @Override
     public void onRequestPermissionsResult(
@@ -184,9 +190,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
-            boolean success = googleMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                            this, R.raw.style_json));
+            int style = pref.getInt("MAP_STYLE", 1);
+            boolean success = false;
+            if(style == 1){
+                success = googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                this, R.raw.style_json));
+            }else if(style == 2){
+                success = googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                this, R.raw.style2_json));
+            }else{
+                success = googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                this, R.raw.style3_json));
+            }
 
             if (!success) {
                 Log.e(LOGTAG, "Style parsing failed.");
@@ -462,7 +480,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_settings) {
-
+            Setting();
 
         }else if (id == R.id.nav_recommend) {
 
@@ -499,6 +517,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             add();
     }
+
+    private void Setting(){
+        Intent intent = new Intent(this,Settings.class);
+        startActivity(intent);
+    }
+
 
     public HashMap<String,String> getFriends (){
 
