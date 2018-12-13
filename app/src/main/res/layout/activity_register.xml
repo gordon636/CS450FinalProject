@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".Register">
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/back" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/orange"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp"
+        tools:context=".Register">
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp"
+            tools:context=".Register">
+
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign-up"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/usernameTaken"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Username Taken!"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+            <EditText
+                android:id="@+id/signUpUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Username"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+            <TextView
+                android:id="@+id/invalidEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Not a valid Email!"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+            <TextView
+                android:id="@+id/emailUsed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email already being used"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+            <EditText
+                android:id="@+id/signUpEmail"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:hint="E-mail"
+                android:imeOptions="actionNext"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+            <EditText
+                android:id="@+id/signUpName"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="Name"
+                android:imeOptions="actionNext"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+            <TextView
+                android:id="@+id/pwLenError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Password Must be at least 4 characters"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+            <EditText
+                android:id="@+id/signUpPW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Password"
+                android:imeOptions="actionNext"
+                android:inputType="textPassword"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+            <TextView
+                android:id="@+id/pwNoMatch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Passwords don't match"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+            <EditText
+                android:id="@+id/signUpPW2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Retype Password"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+            <Button
+                android:id="@+id/signUpBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign Up"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
