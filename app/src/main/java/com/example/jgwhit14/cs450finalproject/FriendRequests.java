@@ -77,7 +77,11 @@ public class FriendRequests extends AppCompatActivity {
                                 String[] aLocationArr = aFriend.split("mySPLIT");
                                 FriendRequestObject friend = new FriendRequestObject(aLocationArr[0]);
 
-                                friendsList.add(0,friend);//add latest one to start of list
+                                // Only add if they haven't already accepted
+                                if (aLocationArr[1] == "true"){
+                                    friendsList.add(0,friend); //add latest one to start of list
+                                }
+
 
                             }
 
