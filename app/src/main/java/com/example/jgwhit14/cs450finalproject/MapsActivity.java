@@ -63,6 +63,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //GPS
     private ListView listView;
     private ArrayList<Location> myList;
+    private HashMap<String, ArrayList<Marker>> myFriendDisplayLocationList;
     public double currentDistance = 0, totalDistance = 0;
     public Button myButton,resetButton;
     private Location startLocation = null;
@@ -123,6 +124,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             this.handler.addObserver(this);
         }
 
+        myFriendDisplayLocationList = new HashMap<>();
         // check permissions
         if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
@@ -213,6 +215,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.e(LOGTAG, "Can't find style. Error: ", e);
         }
 
+        //load friend location here.
+        String friend = pref.getString("FRIEND_LOCATION_SHOW", "");
+        System.out.println("MY FREIND IS:" + friend);
+        if(!friend.equals("")){
+            if(myFriendDisplayLocationList.containsKey(friend)){
+                deletePointers(friend);
+                myFriendDisplayLocationList.remove(friend);
+            }else{
+                myFriendDisplayLocationList.put(friend, new ArrayList<Marker>());
+                loadPointers(friend);
+            }
+            //reset
+            editor.putString("FRIEND_LOCATION_SHOW", "").apply();
+        }
 
         mMap = googleMap;
     }
@@ -275,7 +291,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if(!loaded) {
 
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
-                        loadPointers();
+                        loggedInUser = pref.getString("Username","none");
+                        loadPointers(loggedInUser);
 
                     }
                     loaded=true;
@@ -339,7 +356,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
             if (resultCode == Activity.RESULT_OK){
-                loadPointers();
+                loggedInUser = pref.getString("Username","none");
+                loadPointers(loggedInUser);
             }
          }
 
@@ -351,7 +369,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    public void loadPointers (){
+    public void loadPointers (final String anuser){
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
         //    mMap.animateCamera(CameraUpdateFactory.zoomTo(18),2000, null);
@@ -364,7 +382,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         database  = FirebaseDatabase.getInstance();
         pref = getApplicationContext().getSharedPreferences("Profile",0);
-        loggedInUser = pref.getString("Username","none");
 
         //retrieve locations from Firebase and create MyLocationsObject objects
         DatabaseReference loginRef = database.getReference("users");
@@ -376,7 +393,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (DataSnapshot user:users){
                     String usernameP = user.getKey();
                     //loggedInUser
-                    if(usernameP.equals(loggedInUser)){
+                    if(usernameP.equals(anuser)){
                         User loginUser = user.getValue(User.class);
                         ArrayList<String> userLocations = loginUser.locations;
                         System.out.println("LOCATIONS: " + userLocations);
@@ -399,14 +416,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             location.setLatitude(Double.parseDouble(aLocationArr[0]));
                             location.setLongitude(Double.parseDouble(aLocationArr[1]));
 
-                            myList.add(location);
+                            if(anuser.equals(loggedInUser)){
+                                myList.add(location);
+                            }
 
-                            MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
+                            MyLocationsObject locationToList = new MyLocationsObject(anuser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
 
 //                            locationsList.add(locationToList);
 
                             myLocation = new LatLng(location.getLatitude(), location.getLongitude());
                             final Marker marker = mMap.addMarker(new MarkerOptions().position(myLocation).title(aLocationArr[2]).icon(BitmapDescriptorFactory.defaultMarker(c)));
+
+                            if(!anuser.equals(loggedInUser)){
+                                myFriendDisplayLocationList.get(anuser).add(marker);
+                            }
 
                             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                 @Override
@@ -437,6 +460,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
+    }
+
+    public void deletePointers(String user){
+        ArrayList<Marker> ar = myFriendDisplayLocationList.get(user);
+
+        for(Marker k: ar){
+            k.remove();
+        }
     }
 
     private float randomColor() {

@@ -30,7 +30,7 @@ public class ViewRecommendations extends AppCompatActivity {
         final Intent i = this.getIntent();
         locationsList = i.getExtras().getStringArrayList("Locations");
         radius = findViewById(R.id.textViewRadius);
-        radius.setText(pref.getInt("locationRadius",30));
+        radius.setText(String.valueOf(pref.getInt("locationRadius",30)));
 
         //myList.setAdapter();
 

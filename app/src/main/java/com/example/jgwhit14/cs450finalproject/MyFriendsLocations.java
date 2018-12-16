@@ -34,6 +34,7 @@ public class MyFriendsLocations extends AppCompatActivity {
     private FirebaseDatabase database;
     private String loggedInUser;
     private TextView view_ALL;
+    private TextView undo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,14 @@ public class MyFriendsLocations extends AppCompatActivity {
 
         view_ALL = findViewById(R.id.textView6);
         view_ALL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show();
+            }
+        });
+
+        undo = findViewById(R.id.textView7);
+        undo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 show();
@@ -123,7 +132,6 @@ public class MyFriendsLocations extends AppCompatActivity {
     public void share (View view){
 
 
-
     }
 
     public void friends (View view){
@@ -140,7 +148,8 @@ public class MyFriendsLocations extends AppCompatActivity {
     }
 
     public void show(){
-
+        editor.putString("FRIEND_LOCATION_SHOW", username).apply();
+        finish();
     }
-
 }
+
