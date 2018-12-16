@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -226,6 +227,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }else{
                 myFriendDisplayLocationList.put(friend, new ArrayList<Marker>());
                 loadPointers(friend);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(14),2000, null);
             }
             //reset
             editor.putString("FRIEND_LOCATION_SHOW", "").apply();
@@ -421,8 +424,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-
+                        //pick a random color
                         float c = randomColor();
+                        if(anuser.equals(loggedInUser)){
+                            c = BitmapDescriptorFactory.HUE_BLUE;
+                        }
 
                         for(String aLocation:userLocations) {
                             if (aLocation == null) {
