@@ -3,15 +3,20 @@ package com.example.jgwhit14.cs450finalproject;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,8 +45,10 @@ public class EditLocation extends AppCompatActivity {
         private SharedPreferences pref;
         private SharedPreferences.Editor editor;
         private String realLocation;
-
-        @Override
+        private Bitmap bitmap;
+         private String REMOTE_SERVER = "http://tablemate.online/whereyouat";
+        private Location currentLocation;
+    @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_edit_location);
@@ -48,10 +57,16 @@ public class EditLocation extends AppCompatActivity {
             editor = pref.edit();
 
 
+            String id = pref.getString("idSel","0");
+            System.out.println("We have selected image: "+id);
+            String Data = pref.getString("Username", "...");
+            new LoadImage().execute(REMOTE_SERVER + "/" + Data + "/"+id+".jpg");
+
+
             Save = findViewById(R.id.button3);
             Cancel = findViewById(R.id.button);
             final Intent i = this.getIntent();
-            final Location currentLocation = i.getExtras().getParcelable("location");
+            currentLocation = i.getExtras().getParcelable("location");
             final String nickname = i.getExtras().getString("nickname");
             final String note = i.getExtras().getString("note");
 
@@ -161,5 +176,54 @@ public class EditLocation extends AppCompatActivity {
         }
 
 
+        public void photo (View view){
+            Intent intent = new Intent(this,UploadPhoto.class);
+            startActivity(intent);
+
+        }
+    private class LoadImage extends AsyncTask<String, String, Bitmap> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        protected Bitmap doInBackground(String... args) {
+            try {
+                bitmap = BitmapFactory.decodeStream((InputStream) new URL(args[0]).getContent());
+                SharedPreferences images = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+                SharedPreferences.Editor editor = images.edit();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+
+
+        }
+
+
+        protected void onPostExecute(Bitmap image1) {
+
+            if (image1 != null) {
+                ImageView image = (ImageView)findViewById(R.id.imageViewPrev);
+
+
+                image.setImageBitmap(bitmap);
+
+
+
+
+            } else {
+
+
+            }
+        }
+
+
     }
+
+
+
+}
 

@@ -78,7 +78,7 @@ public class FriendRequests extends AppCompatActivity {
                                 FriendRequestObject friend = new FriendRequestObject(aLocationArr[0]);
 
                                 // Only add if they haven't already accepted
-                                if (aLocationArr[1] == "true"){
+                                if (aLocationArr[1].equals("true")){
                                     friendsList.add(0,friend); //add latest one to start of list
                                 }
 

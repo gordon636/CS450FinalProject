@@ -154,6 +154,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         onMapReady(mMap);
     }
 
+
     //permission granted or not
     @Override
     public void onRequestPermissionsResult(
@@ -323,6 +324,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
        friends();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (t !=null) {
+            t.cancel();
+            ctr.cancel();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (t !=null) {
+            t.cancel();
+            ctr.cancel();
+        }
+    }
+
     public void save (View view){
         save();
     }
@@ -335,7 +354,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             String lon = String.valueOf(currentLocation.getLatitude());
             String lat = String.valueOf(currentLocation.getLongitude());
             //save current location
-            Toast.makeText(getApplicationContext(),"Location Saved!",Toast.LENGTH_LONG).show();
             DatabaseReference AddLocation = FirebaseDatabase.getInstance().getReference();
 
 //
@@ -422,6 +440,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             MyLocationsObject locationToList = new MyLocationsObject(anuser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
 
+
 //                            locationsList.add(locationToList);
 
                             myLocation = new LatLng(location.getLatitude(), location.getLongitude());
@@ -498,6 +517,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         int id = menuItem.getItemId();
 
         if (id == R.id.nav_locations) {
+            //click on my location
+            pref.edit().putString("friend","false").apply();
+
             locations();
         } else if (id == R.id.nav_friends) {
             friends();
@@ -512,12 +534,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             save();
         }else if (id == R.id.nav_share) {
 
+            //click on my location
+            pref.edit().putString("friend","false").apply();
+
+            Toast.makeText(getApplicationContext(),"Select a location to share!",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, MyLocations.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_settings) {
             Setting();
 
         }else if (id == R.id.nav_recommend) {
 
-            if (recommendedLocations.size() == 0){
+            if (!loaded||recommendedLocations.size() == 0){
                 Toast.makeText(getApplicationContext(), "No Recommendations Available!", Toast.LENGTH_LONG).show();
 
             }else {
@@ -741,7 +770,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void recommended() {
 
-        if (recommendedLocations.size() == 0){
+        if (!loaded||recommendedLocations.size() == 0){
             Toast.makeText(getApplicationContext(), "No Recommendations Available!", Toast.LENGTH_LONG).show();
 
         }else {
