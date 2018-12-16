@@ -438,7 +438,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 myList.add(location);
                             }
 
-                            MyLocationsObject locationToList = new MyLocationsObject(anuser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
+                            MyLocationsObject locationToList = new MyLocationsObject(anuser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2], aLocationArr[3]);
 
 
 //                            locationsList.add(locationToList);
