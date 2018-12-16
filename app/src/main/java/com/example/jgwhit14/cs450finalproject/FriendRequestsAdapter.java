@@ -1,5 +1,6 @@
 package com.example.jgwhit14.cs450finalproject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -104,7 +105,7 @@ class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.V
                         Iterable<DataSnapshot> friendRequests = user.child("friendRequests").getChildren();
 
                         DataSnapshot user2 = dataSnapshot.child(username);
-                        Iterable<DataSnapshot> friends = user.child("friends").getChildren();
+                        Iterable<DataSnapshot> friends = user2.child("friends").getChildren();
 
 
                         for(DataSnapshot request:friendRequests){
@@ -112,21 +113,31 @@ class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.V
                             User loginUser = user.getValue(User.class);
                             ArrayList<String> userFriends = loginUser.friends;
 
+
                             String request2 = request.getValue().toString();
                             String requestUsername = request2.split("mySPLIT")[0];
                             if(requestUsername.equals(username)){
-                               ref.child("users").child(loggedInUser).child("friendRequests").child(Integer.toString(position)).setValue(requestUsername + "mySPLITfalse");
-                               ref.child("users").child(loggedInUser).child("friends").child(String.valueOf(userFriends.size())).setValue(username + "mySPLITtrue");
+                               ref.child(loggedInUser).child("friendRequests").child(Integer.toString(position)).setValue(requestUsername + "mySPLITfalse");
+
+                                if(userFriends == null){
+                                    ref.child(loggedInUser).child("friends").child(String.valueOf(0)).setValue(username + "mySPLITtrue");
+                                } else {
+                                    ref.child(loggedInUser).child("friends").child(String.valueOf(userFriends.size())).setValue(username + "mySPLITtrue");
+
+                                }
 
                                // Go through each friend
                                 int index = 0;
                                for(DataSnapshot friend:friends){
-                                   String friendUsername = friend.toString().split("mySPLIT")[0];
+                                   String friendUsername = friend.getValue().toString().split("mySPLIT")[0];
                                    if (friendUsername.equals(loggedInUser)){
-                                       ref.child("users").child(username).child("friends").child(String.valueOf(index)).setValue(loggedInUser + "mySPLITtrue");
+                                       ref.child(username).child("friends").child(String.valueOf(index)).setValue(loggedInUser + "mySPLITtrue");
                                    }
                                    index++;
                                }
+
+                                Intent intent = new Intent(activity, Friends.class);
+                                activity.startActivity(intent);
 
 
                             }
@@ -169,7 +180,6 @@ class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.V
 
             mLayout = v.findViewById(R.id.itemLayout);
             Accept = v.findViewById(R.id.acceptRequest);
-            Reject = v.findViewById(R.id.rejectRequest);
         }
     }
 
