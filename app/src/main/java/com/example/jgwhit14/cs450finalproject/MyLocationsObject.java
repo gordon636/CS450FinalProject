@@ -12,16 +12,18 @@ public class MyLocationsObject {
     public Location myLocation;
     public String title;
     public int id;
+    public String address;
 
     public MyLocationsObject() {
     }
 
-    public MyLocationsObject(String username, Location myLocatoin, String date, String time, String title) {
+    public MyLocationsObject(String username, Location myLocatoin, String date, String time, String title,String address) {
         this.username = username;
         this.myLocation = myLocatoin;
         this.date = date;
         this.time = time;
         this.title = title;
+        this.address= address;
     }
 
     public Location getCoordinates() {

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ad987e"
+    android:layout_marginTop="56dp"
+    android:background="@color/RedDark"
     tools:context=".MyLocationsObject">
 
     <LinearLayout
@@ -17,15 +18,15 @@
         <TextView
             android:id="@+id/textView6"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="#b8ffbb33"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:padding="10dp"
-            android:text="View All On Map"
+            android:text="Clear Save Locations"
             android:textColor="@android:color/background_dark" />
 
         <TextView
@@ -39,6 +40,7 @@
             android:layout_weight="1"
             android:background="@android:color/holo_blue_bright"
             android:gravity="center"
+            android:onClick="friends"
             android:padding="10dp"
             android:text="Friends"
             android:textColor="@android:color/background_dark" />
@@ -46,7 +48,7 @@
         <TextView
             android:id="@+id/textView8"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="10dp"

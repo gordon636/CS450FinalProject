@@ -3,6 +3,17 @@
     package="com.example.jgwhit14.cs450finalproject">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.Manifest.permission.READ_PHONE_STATE" />
+
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:allowBackup="true"
@@ -22,17 +33,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MapsActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".MapsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".MyLocations" />
-        <activity android:name=".Friends" />
-        <activity android:name=".FriendRequests"/>
-        <activity android:name=".MyFriendsLocations" />
+        <activity android:name=".MyLocations"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="Where You At! - My Locations"/>
+        <activity android:name=".Friends"
+            android:label="Where You At! - My Friends"/>/>
+        <activity android:name=".FriendRequests" />
+        <activity android:name=".MyFriendsLocations"
+           />
         <activity
             android:name=".SaveLocation"
             android:label="Save Location"
@@ -46,12 +62,20 @@
             android:label="Add Friend"
             android:theme="@style/Base.Theme.AppCompat.Light.Dialog" />
         <activity
+            android:name=".EditLocation"
+            android:label="Edit Location"
+            android:theme="@style/Base.Theme.AppCompat.Light.Dialog" />
+        <activity
             android:name=".NavigationDrawer"
             android:label="@string/title_activity_navigation_drawer"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".ViewRecommendations"></activity>
-        <activity android:name=".Settings"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ViewRecommendations" />
+        <activity
+            android:name=".Settings"
             android:label="Settings"
+            android:theme="@style/Base.Theme.AppCompat.Light.Dialog" />
+        <activity android:name=".UploadPhoto"
+            android:label="Upload Photo"
             android:theme="@style/Base.Theme.AppCompat.Light.Dialog"></activity>
     </application>
 
