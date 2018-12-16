@@ -3,10 +3,12 @@ package com.example.jgwhit14.cs450finalproject;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -52,23 +54,27 @@ class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final Location location = mDataSet.get(position).myLocation;
         final String username = mDataSet.get(position).username;
+        String address = mDataSet.get(position).address;
         String title = mDataSet.get(position).title;
         String date = mDataSet.get(position).date;
         String time = mDataSet.get(position).time;
 
-        holder.mTextView.setText(title+"\n"+String.valueOf(location.getLatitude()+ ", "+location.getLongitude())+" \n"+date+ " Time: "+time);
+        holder.tvNickname.setText(title);
+        holder.tvAddress.setText(address);
+        holder.tvDate.setText("Date Saved: "+date+ " Time: "+time);
 
 
         //holder.mTextView = (TextView) itemView.findViewById(R.id.tvMessage);
-        holder.mTextView.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent intent = new Intent(activity,SelectLocation.class);
                 intent.putExtra("location",location);
+                intent.putExtra("id",(mDataSet.size()-position-1));
                 intent.putExtra("Username",username);
 
                 activity.startActivity(intent);
@@ -85,12 +91,17 @@ class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.ViewHolder>
      * Inner Class for a recycler view
      */
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mTextView;
+        TextView tvNickname,tvAddress,tvDate;
+        RelativeLayout cardView;
         Location currentLocation;
 
         ViewHolder(View v) {
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.tvMessage);
+            tvNickname = (TextView) v.findViewById(R.id.textViewNickname);
+            tvAddress = (TextView) v.findViewById(R.id.textViewAddress);
+            tvDate = (TextView) v.findViewById(R.id.textViewDate);
+            cardView =  v.findViewById(R.id.card_view);
+
 
         }
     }

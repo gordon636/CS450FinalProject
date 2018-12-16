@@ -44,15 +44,20 @@ public class MyFriendsLocations extends AppCompatActivity {
         //mRecyclerView.setItemAnimator(new SlideInOutLeftItemAnimator(mRecyclerView));
 
 
+
         //download all of this users locations
         username = pref.getString("clicked_username","none");
-        userInfo = (TextView)findViewById(R.id.textViewLocation2);
-        userInfo.setText(username+"'s Locations - Where have they been?");
+        //userInfo = (TextView)findViewById(R.id.textViewLocation2);
+        //userInfo.setText(username+"'s Locations - Where have they been?");
 
 
         database  = FirebaseDatabase.getInstance();
         pref = getApplicationContext().getSharedPreferences("Profile",0);
         loggedInUser = pref.getString("Username","none");
+
+        //click on friends location
+        editor.putString("friend","true").apply();
+
 
         //retrieve locations from Firebase and create MyLocationsObject objects
         DatabaseReference loginRef = database.getReference("users");
@@ -83,7 +88,7 @@ public class MyFriendsLocations extends AppCompatActivity {
                             location.setLatitude(Double.parseDouble(aLocationArr[0]));
                             location.setLongitude(Double.parseDouble(aLocationArr[1]));
 
-                            MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2]);
+                            MyLocationsObject locationToList = new MyLocationsObject(loggedInUser, location, aLocationArr[5], aLocationArr[6], aLocationArr[2],aLocationArr[3]);
 
                             locationsList.add(0,locationToList);//add latest one to start of list
                         }

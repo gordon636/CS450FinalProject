@@ -108,8 +108,8 @@ class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
             super(v);
             pref = activity.getSharedPreferences("Profile",0);
             editor = pref.edit();
-            mTextViewApproved = v.findViewById(R.id.mTextViewEmail);
-            mTextViewUsername = v.findViewById(R.id.mTextViewUsername);
+            mTextViewApproved = v.findViewById(R.id.textViewStatus);
+            mTextViewUsername = v.findViewById(R.id.textViewUsername);
 
             mLayout = v.findViewById(R.id.itemLayout);
 
