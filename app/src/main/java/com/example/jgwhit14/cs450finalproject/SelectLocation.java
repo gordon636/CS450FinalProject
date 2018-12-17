@@ -9,6 +9,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +46,7 @@ public class SelectLocation extends AppCompatActivity {
     private TextView nickname,note;
     private Bitmap bitmap;
     private String REMOTE_SERVER = "http://tablemate.online/whereyouat";
-
+    private  Parcelable MapSelect;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,8 @@ public class SelectLocation extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("Profile",0);
         editor = pref.edit();
 
+        loggedInUser =pref.getString("Username", "...");
+        editor.putString("SelectedUsername",loggedInUser).apply();
 
         Save = findViewById(R.id.button3);
         Cancel = findViewById(R.id.button);
@@ -64,13 +68,37 @@ public class SelectLocation extends AppCompatActivity {
         }
 
         final Intent i = this.getIntent();
+        realLocation = "Unknown Location";
+
+        Integer id;
          currentLocation = i.getExtras().getParcelable("location");
+
+         LatLng myLocationsObject;
+
+        if (i.getExtras().getParcelable("bundle") !=null){
+             MapSelect = i.getExtras().getParcelable("bundle");
+              myLocationsObject =i.getExtras().getParcelable("bundle");
+
+
+            currentLocation.setLongitude(myLocationsObject.longitude);
+
+            currentLocation.setLatitude(myLocationsObject.latitude);
+
+            String []data =  i.getExtras().getString("id", "0").split("mySPLIT");
+            id = Integer.valueOf(data[0]);
+            editor.putString("SelectedUsername",data[1]).apply();
+
+            // id = i.getIntExtra("id", 0);
+
+        }else{
+            id = i.getIntExtra("id", 0);
+
+        }
+        editor.putString("idSel",String.valueOf(id)).apply();
 //        System.out.println("array  "+ myList.toString());
 
 //        myList.add(currentLocation);
-        realLocation = "Unknown Location";
-        int id = i.getIntExtra("id", 0);
-        editor.putString("idSel",String.valueOf(id)).apply();
+
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         try {
             List<Address> listAddresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
@@ -82,21 +110,35 @@ public class SelectLocation extends AppCompatActivity {
         }
 
         TextView RealLocation = findViewById(R.id.textViewRealName);
+
+
         RealLocation.setText(realLocation);
 
         TextView coordinates = findViewById(R.id.textViewCoordinates);
-        coordinates.setText(currentLocation.getLatitude()+ ","+currentLocation.getLongitude());
+
+        if (MapSelect !=null && !loggedInUser.equals(pref.getString("SelectedUsername", "..."))){
+            coordinates.setText(currentLocation.getLatitude() + "," + currentLocation.getLongitude() +" \nShared by: "+pref.getString("SelectedUsername", "..."));
+
+
+        }else {
+            coordinates.setText(currentLocation.getLatitude() + "," + currentLocation.getLongitude());
+        }
 
          nickname = findViewById(R.id.textViewNickname);
         note = findViewById(R.id.textViewNote);
         downloadData();
 
         String idImage = pref.getString("idSel","0");
-        System.out.println("We have selected image: "+id);
-        String Data = pref.getString("Username", "...");
+
+        String Data = pref.getString("SelectedUsername", "...");
+
+        System.out.println("We have selected image: "+idImage+ " - username "+Data);
         new LoadImage().execute(REMOTE_SERVER + "/" + Data + "/"+idImage+".jpg");
+        editor.putString("SelectedUsername",loggedInUser).apply();
+
 
     }
+
 
     public void share (View view){
 
@@ -154,7 +196,6 @@ public class SelectLocation extends AppCompatActivity {
                                 // This is the data for the selected location... set text fields
                                 nickname.setText("Nickname: "+aLocationArr[2]);
                                 note.setText("Notes: "+aLocationArr[4]);
-
                                 System.out.println("Index of this place is: "+index);
                                 editor.putString("selectedLocationIndex", String.valueOf(index)).apply();
                             }

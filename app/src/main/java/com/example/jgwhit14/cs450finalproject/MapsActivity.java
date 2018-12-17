@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -191,6 +192,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
         try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
@@ -226,15 +229,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 myFriendDisplayLocationList.remove(friend);
             }else{
                 myFriendDisplayLocationList.put(friend, new ArrayList<Marker>());
-                loadPointers(friend);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(14),2000, null);
+
+                if (loaded && mMap !=null) {
+                    loadPointers(friend);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
+                }
             }
             //reset
             editor.putString("FRIEND_LOCATION_SHOW", "").apply();
         }
 
-        mMap = googleMap;
+
     }
 
     @Override
@@ -378,8 +384,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             if (resultCode == Activity.RESULT_OK){
                 loggedInUser = pref.getString("Username","none");
-                loadPointers(loggedInUser);
-            }
+
+                if (mMap!=null && loaded) {
+                    loadPointers(loggedInUser);
+                }
+              }
          }
 
     public void myRefreshLocation (View view){
@@ -392,7 +401,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void loadPointers (final String anuser){
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+            if(mMap!=null && loaded){
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+
+            }
         //    mMap.animateCamera(CameraUpdateFactory.zoomTo(18),2000, null);
 
         ctr = new Counter();
@@ -430,13 +442,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             c = BitmapDescriptorFactory.HUE_BLUE;
                         }
 
+                        int id = 0;
                         for(String aLocation:userLocations) {
                             if (aLocation == null) {
                                 continue;
                             }
                             String[] aLocationArr = aLocation.split("mySPLIT");
 
-                            Location location = new Location("");
+                            final Location location = new Location("");
                             location.setLatitude(Double.parseDouble(aLocationArr[0]));
                             location.setLongitude(Double.parseDouble(aLocationArr[1]));
 
@@ -452,17 +465,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             myLocation = new LatLng(location.getLatitude(), location.getLongitude());
                             final Marker marker = mMap.addMarker(new MarkerOptions().position(myLocation).title(aLocationArr[2]).icon(BitmapDescriptorFactory.defaultMarker(c)));
 
+
+                            marker.setTag(id);
+
+
                             if(!anuser.equals(loggedInUser)){
                                 myFriendDisplayLocationList.get(anuser).add(marker);
                             }
+
+                            final int finalId = id;
+                            id++;
 
                             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                 @Override
                                 public boolean onMarkerClick(Marker aMarker) {
 
-                                    if (aMarker == marker) {
-                                        Toast.makeText(getApplicationContext(), "Marker Clicked", Toast.LENGTH_LONG).show();
-                                    }
+                                   // if (aMarker == marker) {
+                                      //  Toast.makeText(getApplicationContext(), "Marker Clicked - "+aMarker.getTag(), Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(MapsActivity.this,SelectLocation.class);
+                                        intent.putExtra("location",location);
+                                         intent.putExtra("bundle", aMarker.getPosition());
+                                         intent.putExtra("Username",loggedInUser);
+                                         intent.putExtra("id",aMarker.getTag().toString()+"mySPLIT"+anuser);
+                                            // intent.putExtra("id",(mDataSet.size()-position-1));
+
+
+                                    startActivity(intent);
+                                    //}
                                     return false;
                                 }
                             });

@@ -154,6 +154,7 @@ public class MyFriendsLocations extends AppCompatActivity {
 
     public void show(){
         editor.putString("FRIEND_LOCATION_SHOW", username).apply();
+
         finish();
     }
 }
