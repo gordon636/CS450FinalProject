@@ -76,7 +76,7 @@ public class UploadPhoto extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
     public static final String ALLOW_KEY = "ALLOWED";
     public static final String CAMERA_PREF = "camera_pref";
-    private String REMOTE_SERVER = "http://tablemate.online/whereyouat";
+    private String REMOTE_SERVER = "https://sluace.com";
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
 
     @Override
@@ -159,7 +159,7 @@ public class UploadPhoto extends AppCompatActivity {
     }
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 30, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
@@ -193,6 +193,8 @@ public class UploadPhoto extends AppCompatActivity {
                         //Showing toast message of the response
                         Toast.makeText(UploadPhoto.this, s , Toast.LENGTH_LONG).show();
                         System.out.println(s);
+
+                        setResult(Activity.RESULT_OK);
                     }
                 },
                 new Response.ErrorListener() {

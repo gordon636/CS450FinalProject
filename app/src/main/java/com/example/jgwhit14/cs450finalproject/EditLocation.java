@@ -11,6 +11,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -46,7 +47,7 @@ public class EditLocation extends AppCompatActivity {
         private SharedPreferences.Editor editor;
         private String realLocation;
         private Bitmap bitmap;
-         private String REMOTE_SERVER = "http://tablemate.online/whereyouat";
+          private String REMOTE_SERVER = "https://sluace.com";
         private Location currentLocation;
     @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -178,9 +179,28 @@ public class EditLocation extends AppCompatActivity {
 
         public void photo (View view){
             Intent intent = new Intent(this,UploadPhoto.class);
-            startActivity(intent);
+            startActivityForResult(intent,12345);
+        }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK){
+
+            pref = getApplicationContext().getSharedPreferences("Profile",0);
+            editor = pref.edit();
+
+
+            String id = pref.getString("idSel","0");
+            System.out.println("We have selected image: "+id);
+            String Data = pref.getString("Username", "...");
+            new LoadImage().execute(REMOTE_SERVER + "/" + Data + "/"+id+".jpg");
 
         }
+    }
+
     private class LoadImage extends AsyncTask<String, String, Bitmap> {
         @Override
         protected void onPreExecute() {

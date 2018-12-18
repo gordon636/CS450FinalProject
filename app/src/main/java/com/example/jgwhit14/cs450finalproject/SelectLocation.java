@@ -45,7 +45,7 @@ public class SelectLocation extends AppCompatActivity {
     private Location currentLocation;
     private TextView nickname,note;
     private Bitmap bitmap;
-    private String REMOTE_SERVER = "http://tablemate.online/whereyouat";
+    private String REMOTE_SERVER = "https://sluace.com";
     private  Parcelable MapSelect;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -226,8 +226,19 @@ public class SelectLocation extends AppCompatActivity {
 
         if (resultCode == Activity.RESULT_OK){
             downloadData();
+            pref = getApplicationContext().getSharedPreferences("Profile",0);
+            editor = pref.edit();
+
+
+            String id = pref.getString("idSel","0");
+            System.out.println("We have selected image: "+id);
+            String Data = pref.getString("Username", "...");
+            new LoadImage().execute(REMOTE_SERVER + "/" + Data + "/"+id+".jpg");
+            setResult(RESULT_OK);
         }
     }
+
+
     public void edit (View view){
 
         Intent intent = new Intent(this, EditLocation.class);
@@ -284,5 +295,6 @@ public class SelectLocation extends AppCompatActivity {
 
 
     }
+
 
 }
