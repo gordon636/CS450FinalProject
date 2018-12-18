@@ -156,6 +156,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         onMapReady(mMap);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mMap != null) {
+            onMapReady(mMap);
+        }
+    }
 
     //permission granted or not
     @Override

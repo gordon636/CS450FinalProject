@@ -48,6 +48,10 @@ public class Friends extends AppCompatActivity {
 
     }
 
+    public void map (View view){
+
+        finish();
+    }
     private void loadFriends() {
 
         friendsList.clear();
@@ -75,7 +79,6 @@ public class Friends extends AppCompatActivity {
                         if (userFirends != null){
 
                             //has friends, check friend to see if they added us back if so add to my friends
-                            Toast.makeText(Friends.this, "I have friends", Toast.LENGTH_SHORT).show();
 
                             for(String aFirend:userFirends){
                                 if(aFirend == null){

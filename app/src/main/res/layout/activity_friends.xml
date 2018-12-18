@@ -33,6 +33,16 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_weight="1"
+            android:onClick="map"
+            android:text="View Map" />
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_weight="1"
             android:onClick="friendRequests"
             android:text="Friend Requests" />
     </LinearLayout>

@@ -9,53 +9,49 @@
     android:background="@color/blue"
     android:padding="5dp">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view1"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="3dp"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="1dp">
+        android:layout_alignParentTop="false"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/Black_Spinner"
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/mTextViewUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:padding="@dimen/list_item_padding"
-            android:text="@string/text_item"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:layout_centerVertical="false"
+            android:layout_toRightOf="@+id/imageView2"
+            android:padding="10dp"
+            android:text="Username"
+            android:textColor="@color/White_real"
+            android:textSize="18sp" />
 
-    </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="-15dp"
-        android:layout_toEndOf="@+id/card_view1"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="1dp">
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="false"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@android:drawable/btn_star_big_on" />
 
-    </android.support.v7.widget.CardView>
+        <Button
+            android:id="@+id/acceptRequest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mTextViewUsername"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentEnd="false"
+            android:layout_toRightOf="@+id/imageView2"
+            android:text="Accept" />
 
-    <Button
-        android:id="@+id/acceptRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="129dp"
-        android:text="Accept" />
+    </RelativeLayout>
 
 </RelativeLayout>
