@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Blackcc"
+    android:background="#d28c00"
     tools:context=".MyLocationsObject">
 
     <LinearLayout
@@ -23,8 +23,11 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_weight="1"
+            android:background="@color/RedDark"
             android:onClick="add"
-            android:text="Add Friend" />
+            android:text="Add Friend"
+            android:textColor="@color/White_real"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button3"
@@ -33,8 +36,10 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_weight="1"
+            android:background="@color/colorPrimary"
             android:onClick="map"
-            android:text="View Map" />
+            android:text="View Map"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button6"
@@ -43,8 +48,10 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_weight="1"
+            android:background="@color/orange"
             android:onClick="friendRequests"
-            android:text="Friend Requests" />
+            android:text="Friend Requests"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

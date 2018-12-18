@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class Settings extends AppCompatActivity {
@@ -15,6 +17,7 @@ public class Settings extends AppCompatActivity {
     private int style;
     private SeekBar radiusBar;
     private TextView radiusTextView;
+    private Switch switchRadius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +42,9 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 
-                editor.putInt("locationRadius",i+10).apply();
+                editor.putInt("locationRadius",i).apply();
                 radiusTextView.setText(pref.getInt("locationRadius",30) + " km");
+
             }
 
             @Override
@@ -85,5 +89,29 @@ public class Settings extends AppCompatActivity {
                 finish();
             }
         });
+
+
+        switchRadius= findViewById(R.id.switchRadius);
+        if (pref.getString("radiusOn", "true").equals("true")){
+
+            switchRadius.setChecked(true);
+        }else{
+            switchRadius.setChecked(false);
+        }
+
+        switchRadius.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b){
+                    switchRadius.setChecked(true);
+                    pref.edit().putString("radiusOn","true").apply();
+                }else{
+                    switchRadius.setChecked(false);
+                    pref.edit().putString("radiusOn","false").apply();
+                }
+            }
+        });
+
     }
 }

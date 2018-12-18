@@ -163,6 +163,7 @@ public class MyLocations extends AppCompatActivity implements NavigationView.OnN
 
     public void share (View view){
 
+        Toast.makeText(getApplicationContext(),"Select a location to share!",Toast.LENGTH_LONG).show();
 
 
     }

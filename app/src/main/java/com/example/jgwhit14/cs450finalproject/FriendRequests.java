@@ -68,7 +68,6 @@ public class FriendRequests extends AppCompatActivity {
                         if (userFriendRequests != null){
 
                             //has friends, check friend to see if they added us back if so add to my friends
-                            Toast.makeText(FriendRequests.this, "I have friends", Toast.LENGTH_SHORT).show();
 
                             for(String aFriend:userFriendRequests){
                                 if(aFriend == null){

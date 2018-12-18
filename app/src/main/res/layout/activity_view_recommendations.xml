@@ -1,21 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp"
+    android:background="@color/RedDark"
+    android:padding="20dp"
     tools:context=".ViewRecommendations">
 
-    <TextView
-        android:id="@+id/textViewRadius"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Locations Within " />
-
-    <ListView
-        android:id="@+id/listViewLocations"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="20dp" />
-</android.support.constraint.ConstraintLayout>
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewRadius"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:background="@color/Black_Spinner"
+                android:padding="10dp"
+                android:text="Locations Within "
+                android:textColor="@color/White_real"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/button7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/textViewRadius"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                android:onClick="settings"
+                android:text="Change" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recylcerViewLoactions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/textViewRadius"
+            android:layout_alignParentStart="false"
+            app:layout_constraintTop_toBottomOf="@+id/textViewRadius">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+</RelativeLayout>

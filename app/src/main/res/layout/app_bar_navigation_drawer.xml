@@ -30,6 +30,8 @@
                 android:textStyle="bold" />
         </android.support.v7.widget.Toolbar>
 
+
+
     </android.support.design.widget.AppBarLayout>
 
     <include

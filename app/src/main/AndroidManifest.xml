@@ -46,7 +46,9 @@
             android:label="Where You At! - My Locations"/>
         <activity android:name=".Friends"
             android:label="Where You At! - My Friends"/>/>
-        <activity android:name=".FriendRequests" />
+        <activity android:name=".FriendRequests"
+            android:label="Friend Requests"
+            android:theme="@style/Base.Theme.AppCompat.Light.Dialog"/>
         <activity android:name=".MyFriendsLocations"
            />
         <activity
@@ -69,7 +71,9 @@
             android:name=".NavigationDrawer"
             android:label="@string/title_activity_navigation_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ViewRecommendations" />
+        <activity android:name=".ViewRecommendations"
+            android:label="Recommended Locations"
+            android:theme="@style/Base.Theme.AppCompat.Light.Dialog"/>
         <activity
             android:name=".Settings"
             android:label="Settings"
@@ -77,6 +81,7 @@
         <activity android:name=".UploadPhoto"
             android:label="Upload Photo"
             android:theme="@style/Base.Theme.AppCompat.Light.Dialog"></activity>
+        <activity android:name=".Register"/>
     </application>
 
 </manifest>

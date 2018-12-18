@@ -2,11 +2,13 @@ package com.example.jgwhit14.cs450finalproject;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -26,10 +28,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +42,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -85,7 +91,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng myLocation;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-
+    private Circle circle;
     private final static int PERMISSION_REQUEST_CODE = 999;
     private static final int REQUEST_LOCATION = 1;
     private final static String LOGTAG = MapsActivity.class.getSimpleName();
@@ -101,6 +107,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Timer t = null;
     private Counter ctr = null;
     int lastMinute;
+    private ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +132,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             this.handler = new LocationHandler(this);
             this.handler.addObserver(this);
         }
+
+         dialog = ProgressDialog.show(MapsActivity.this, "",
+                "Loading. Please wait...", true);
 
         myFriendDisplayLocationList = new HashMap<>();
         // check permissions
@@ -161,6 +171,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onResume();
         if (mMap != null) {
             onMapReady(mMap);
+            int currentRadius = pref.getInt("locationRadius",30);
+
+            if (loaded) {
+
+                if (circle !=null){
+                    circle.remove();
+                }
+                getFriends();
+                circle = mMap.addCircle(new CircleOptions()
+                        .center(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
+                        .radius(currentRadius * 1000)
+                        .strokeColor(Color.RED)
+                        .fillColor(Color.argb(50, 0, 0, 255)));
+
+                if (pref.getString("radiusOn", "true").equals("false")){
+                    circle.setVisible(false);
+                }else{
+                    circle.setVisible(true);
+                }
+            }
+
         }
     }
 
@@ -201,6 +232,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
+
         try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
@@ -219,6 +252,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         MapStyleOptions.loadRawResourceStyle(
                                 this, R.raw.style3_json));
             }
+
+
 
             if (!success) {
                 Log.e(LOGTAG, "Style parsing failed.");
@@ -310,6 +345,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                         loggedInUser = pref.getString("Username","none");
                         loadPointers(loggedInUser);
+                        dialog.dismiss();
+
+                        int currentRadius = pref.getInt("locationRadius",30);
+
+
+                        if (circle !=null){
+                            circle.remove();
+                        }
+                            circle = mMap.addCircle(new CircleOptions()
+                                    .center(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
+                                    .radius(currentRadius * 1000)
+                                    .strokeColor(Color.RED)
+                                    .fillColor(Color.argb(50, 0, 0, 255)));
+                            if (pref.getString("radiusOn", "true").equals("false")){
+                                circle.setVisible(false);
+                            }else{
+                                circle.setVisible(true);
+                            }
 
                     }
                     loaded=true;
@@ -408,11 +461,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void loadPointers (final String anuser){
 
+
+
             if(mMap!=null && loaded){
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
 
+
             }
         //    mMap.animateCamera(CameraUpdateFactory.zoomTo(18),2000, null);
+        int currentRadius = pref.getInt("locationRadius",30);
+
+
+        if (loaded) {
+
+            if (circle !=null){
+                circle.remove();
+            }
+            circle = mMap.addCircle(new CircleOptions()
+                    .center(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
+                    .radius(currentRadius * 1000)
+                    .strokeColor(Color.RED)
+                    .fillColor(Color.argb(50, 0, 0, 255)));
+            if (pref.getString("radiusOn", "true").equals("false")){
+                circle.setVisible(false);
+            }else{
+                circle.setVisible(true);
+            }
+        }
+
 
         ctr = new Counter();
         ctr.count = 0;
@@ -482,23 +558,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             final int finalId = id;
                             id++;
-
+                            if (marker.getTag() == null){
+                                marker.setZIndex(500);
+                            }
                             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                 @Override
                                 public boolean onMarkerClick(Marker aMarker) {
 
-                                   // if (aMarker == marker) {
-                                      //  Toast.makeText(getApplicationContext(), "Marker Clicked - "+aMarker.getTag(), Toast.LENGTH_LONG).show();
-                                        Intent intent = new Intent(MapsActivity.this,SelectLocation.class);
-                                        intent.putExtra("location",location);
-                                         intent.putExtra("bundle", aMarker.getPosition());
-                                         intent.putExtra("Username",loggedInUser);
-                                         intent.putExtra("id",aMarker.getTag().toString()+"mySPLIT"+anuser);
-                                            // intent.putExtra("id",(mDataSet.size()-position-1));
+                                    if (aMarker.getTag() == null){
+                                        aMarker.setZIndex(500);
+                                    }else {
+                                        Intent intent = new Intent(MapsActivity.this, SelectLocation.class);
+                                        intent.putExtra("location", location);
+                                        intent.putExtra("bundle", aMarker.getPosition());
+                                        intent.putExtra("Username", loggedInUser);
+                                        intent.putExtra("id", aMarker.getTag().toString() + "mySPLIT" + anuser);
 
+                                        startActivity(intent);
 
-                                    startActivity(intent);
-                                    //}
+                                    }
                                     return false;
                                 }
                             });
@@ -590,6 +668,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             if (!loaded||recommendedLocations.size() == 0){
                 Toast.makeText(getApplicationContext(), "No Recommendations Available!", Toast.LENGTH_LONG).show();
+                TextView recommend = findViewById(R.id.textViewRecomend);
+                recommend.setText("0");
+
 
             }else {
                 Intent intent = new Intent(this, ViewRecommendations.class);
@@ -652,19 +733,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     //loggedInUser
                     User loginUser = user.getValue(User.class);
 
+                    System.out.println("CHECKING "+usernameP + " locations: "+loginUser.locations.size() );
 
 
-
-                     if (loginUser.locations !=null) {
+                     if (loginUser.locations.size() !=0) {
                          for (int i = 0; i < loginUser.locations.size(); i++) {
-
 
                              userLocations.add(usernameP+"myFriendSPLIT"+loginUser.locations.get(i));
                              System.out.println(usernameP+"myFriendSPLIT"+loginUser.locations.get(i));
                          }
                      }
 
-                     if(usernameP.equals(loggedInUser)){
+                  //   if(usernameP.equals(loggedInUser)){
 
                         ArrayList<String> userFirends = loginUser.friends;
 
@@ -684,21 +764,31 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 System.out.println("currentFriend: "+aFirend);
 
                                 String[] currentFriendData = aFirend.split("mySPLIT");
+                                System.out.println("currentFriendData: "+currentFriendData.length);
 
                                 //go through userLocations list and filter out friends
+                                for (int i =0; i <userLocations.size();i++){
+
+                                    System.out.println("LOCATION: "+userLocations.get(i));
+                                }
+
                                 for (String aLocation: userLocations) { //go through all the locations
 
                                     String[] getUser = aLocation.split("myFriendSPLIT");
                                     String username = getUser[0];
 
+                                    System.out.println("User to check: "+username + " logged in "+loggedInUser);
+
                                     if (!username.equals(loggedInUser)) { //dont check logged in users locations
                                         System.out.println("current username: " + username + " to match with: "+currentFriendData[0]);
 
 
-                                        if (username.equals(currentFriendData[0])) {
+                                       // if (username.equals(currentFriendData[0])) {
                                             System.out.println("friend username: " + currentFriendData[0]);
-                                            locationsList.add(aLocation);
-                                        }
+                                            if(!locationsList.contains(aLocation) ){
+                                                locationsList.add(aLocation);
+                                            }
+                                        //}
 
                                     }
                                 }
@@ -709,14 +799,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         }
 
 
-                    }
-                    recommended(currentLocation,pref.getInt("locationRadius",30)); //radius needs to be calculated settings
+                   // }
 
                     //System.out.println("OUR LOCATIONS: "+locationsList);
-
-
-
                 }
+                recommended(currentLocation,pref.getInt("locationRadius",30)); //radius needs to be calculated settings
 
 
             }
@@ -744,7 +831,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             String []coordinates = userData[1].split("mySPLIT");
 
-            System.out.println("Lat: "+coordinates[0]+" Lon: "+coordinates[1]);
 
 
             //now compare lat lon to current location
@@ -752,7 +838,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             myFriendLocation.setLongitude(Double.valueOf(coordinates[1]));
             myFriendLocation.setLatitude(Double.valueOf(coordinates[0]));
 
-            if (myLocation.distanceTo(myFriendLocation)/1000 < radius){ //use km radius and distance
+            double distance = myLocation.distanceTo(myFriendLocation);//disstance betwwen locations in meters
+
+            if (distance < radius *1000){ //use km radius and distance
+                System.out.println("Distance: "+distance);
 
                 recommendedLocations.add(friendLocation);
             }
@@ -762,9 +851,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (recommendedLocations.size() > 0) {
             int size = recommendedLocations.size();
-            Toast.makeText(getApplicationContext(), "You have " + size + " recommended location(s)", Toast.LENGTH_LONG).show();
+            int currentRadius = pref.getInt("locationRadius",30);
+
+            Toast.makeText(getApplicationContext(), "You have " + size + " recommended location(s) within "+currentRadius+"km!" , Toast.LENGTH_LONG).show();
             TextView recommend = findViewById(R.id.textViewRecomend);
             recommend.setText(String.valueOf(size)+" *");
+        }else{
+            TextView recommend = findViewById(R.id.textViewRecomend);
+            recommend.setText("0");
         }
     }
 
@@ -791,7 +885,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     //calculate min secs and split sec from 10th of sec
                     int min = count /600;
 
-                    System.out.println("min - lastMinute: "+(min - lastMinute));
+//                    System.out.println("min - lastMinute: "+(min - lastMinute));
                     if ((min - lastMinute) ==interval && lastMinute != min || count ==0){ //must recommend locations every 5mins or when the timer starts
 
                         System.out.println("counting - " + lastMinute);
@@ -814,6 +908,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (!loaded||recommendedLocations.size() == 0){
             Toast.makeText(getApplicationContext(), "No Recommendations Available!", Toast.LENGTH_LONG).show();
+            TextView recommend = findViewById(R.id.textViewRecomend);
+            recommend.setText("0");
 
         }else {
             Intent intent = new Intent(this, ViewRecommendations.class);
@@ -822,5 +918,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.maps_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_refresh) {
+            finish();
+            Intent intent = new Intent(MapsActivity.this,MapsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+public void refresh (View view){
+
+        Intent intent = new Intent(this,MapsActivity.class);
+        startActivity(intent);
+        finish();
+}
 }
 

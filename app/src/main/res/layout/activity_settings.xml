@@ -88,8 +88,8 @@
         <SeekBar
             android:id="@+id/seekBarRadius"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="190"
+            android:layout_height="20dp"
+            android:max="200"
 
             android:progress="30" />
 
@@ -98,6 +98,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Show Radius" />
+
+        <Switch
+            android:id="@+id/switchRadius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Turn On/Off"
+            android:textOff="Radius Off"
+            android:textOn="Radius On" />
 
     </LinearLayout>
 
