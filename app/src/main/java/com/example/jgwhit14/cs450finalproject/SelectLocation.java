@@ -34,9 +34,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class SelectLocation extends AppCompatActivity {
-    private ArrayList<Location> myList;
-    private Button Save;
-    private Button Cancel;
     private FirebaseDatabase database;
     private String loggedInUser;
     private SharedPreferences pref;
@@ -58,8 +55,6 @@ public class SelectLocation extends AppCompatActivity {
         loggedInUser =pref.getString("Username", "...");
         editor.putString("SelectedUsername",loggedInUser).apply();
 
-        Save = findViewById(R.id.button3);
-        Cancel = findViewById(R.id.button);
 
         if (pref.getString("friend","false").equals("true")){
 
@@ -215,8 +210,6 @@ public class SelectLocation extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     @Override

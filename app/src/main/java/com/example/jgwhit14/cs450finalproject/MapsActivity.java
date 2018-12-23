@@ -69,22 +69,14 @@ import java.util.TimerTask;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, Observer, NavigationView.OnNavigationItemSelectedListener{
 
     //GPS
-    private ListView listView;
     private ArrayList<Location> myList;
     private HashMap<String, ArrayList<Marker>> myFriendDisplayLocationList;
-    public double currentDistance = 0, totalDistance = 0;
-    public Button myButton,resetButton;
     private Location startLocation = null;
     private Location currentLocation = null;
-    private Location prev_Location = null;
     private LocationHandler handler = null;
-    private double overalVelocity;
-    private double pointVelocity;
     public double instantVel;
     private boolean permissions_granted;
     private boolean isRestart = false;
-    private String myData;
-    private Toast ToastMess;
     private DecimalFormat df = new DecimalFormat("0.00");
     private TextView textViewLocation;
     private boolean loaded = false;
@@ -93,14 +85,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private SharedPreferences.Editor editor;
     private Circle circle;
     private final static int PERMISSION_REQUEST_CODE = 999;
-    private static final int REQUEST_LOCATION = 1;
     private final static String LOGTAG = MapsActivity.class.getSimpleName();
     private ArrayList locationsList;
     private FirebaseDatabase database;
     private String loggedInUser;
 
     private GoogleMap mMap;
-    private ArrayList friendsList;
     private  Marker MyLocationMarker;
     private  ArrayList recommendedLocations;
     //counter
@@ -506,7 +496,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 Iterable<DataSnapshot> users = dataSnapshot.getChildren();
-                for (DataSnapshot user:users){
+                for (final DataSnapshot user:users){
                     String usernameP = user.getKey();
                     //loggedInUser
                     if(usernameP.equals(anuser)){
@@ -571,7 +561,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         Intent intent = new Intent(MapsActivity.this, SelectLocation.class);
                                         intent.putExtra("location", location);
                                         intent.putExtra("bundle", aMarker.getPosition());
-                                        intent.putExtra("Username", loggedInUser);
+
+                                        if(!anuser.equals(loggedInUser)){ //if not logged in user  get the username
+                                            intent.putExtra("Username", anuser);
+                                            Toast.makeText(getApplicationContext(),"You selected: "+anuser,Toast.LENGTH_LONG).show();
+
+                                        }else {
+                                            intent.putExtra("Username", loggedInUser);
+                                            editor.putString("Username",loggedInUser).apply();
+                                            Toast.makeText(getApplicationContext(),"You selected: "+loggedInUser,Toast.LENGTH_LONG).show();
+
+                                        }
                                         intent.putExtra("id", aMarker.getTag().toString() + "mySPLIT" + anuser);
 
                                         startActivity(intent);
